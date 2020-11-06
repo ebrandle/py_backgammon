@@ -4,35 +4,49 @@
 
 import turtle
 
+def processLocation(quad,triangle,board):
+    row = 0
+    col = 0
+    if quad in [0,1]:
+        row = 0
+        #if quad == 0:
+            #col = (-triangle) + 
+    else:
+        row = 11
+    
+    return row,col
+
 def drawToken(t,wn,quad,tri,color,ringColor,board):
     board[quad][tri] = color[0]
+    print(board)
+    row,col = processLocation(quad,tri,board)
     wn.tracer(False)
     
     t.color('black',color)
     t.begin_fill()
     t.up()
-    t.goto(tri+.5,quad)
+    t.goto(row+.5,col)
     t.down()
     t.circle(.24)
     t.end_fill()
     t.color(ringColor)
     for size in range(1,4):
         t.up()
-        t.goto(tri+.5,quad+(.25-(size*.06)-.01))
+        t.goto(row+.5,col+(.25-(size*.06)-.01))
         t.down()
         t.circle(size*.06)
 
     wn.tracer(True)
     return board
 
-def drawTriangle(t,pos,color,level):
+def drawTriangle(t,pos,color,height):
     t.color('black',color)
     t.begin_fill()
-    if level == 0:
+    if height == 0:
         t.goto(pos+.5,2.8)
     else:
         t.goto(pos+.5,3.2)
-    t.goto(pos,level)
+    t.goto(pos,height)
     t.end_fill()
 
 def drawBoardEdge(t,edgeColor,fill):
@@ -53,15 +67,28 @@ def drawBoardEdge(t,edgeColor,fill):
     t.pensize(1)
     t.up()
 
-def drawTriRow(t,color1,color2,level):
-    t.goto(12,level)
+def drawTriRow(t,color1,color2,height):
+    t.goto(12,height)
     t.down()
     pos = 11
     for x in range(6):
         for color in [color1,color2]:
-            drawTriangle(t,pos,color,level)
+            drawTriangle(t,pos,color,height)
             pos -= 1
     t.up()
+
+def labelPlaces(t):
+    for row in [0,6]:
+        for quad in [1,2]:
+            pass
+        t.up()
+        t.color("black","black")
+        if row == 0:
+            t.goto(11.45,row-.2)
+        else:
+            t.goto(11.45,row+.5)
+        t.write(chr(row+65)+'1', font=("courier new",10,"bold"))
+    
 
 def drawBoard(t,wn,board):
     wn.tracer(False)
