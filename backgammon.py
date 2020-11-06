@@ -13,12 +13,13 @@ def newGame():
     pass
 
 def setUpBoard():
+    # turtle init stuff
     wn=turtle.Screen()
     wn.setworldcoordinates(-1,13,13,-1)
     t=turtle.Turtle()
     t.hideturtle()
     wn.tracer(False)
-
+    # make logical board
     quad = ['']*6
     board = [quad[:],quad[:],quad[:],quad[:]]
 
@@ -26,7 +27,6 @@ def setUpBoard():
 
 def main():
     t,wn,board = setUpBoard()
-    print(t.pensize())
     drawing.drawBoard(t,wn,board)
     #print(board)
     white = 'tan'

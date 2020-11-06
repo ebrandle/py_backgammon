@@ -35,40 +35,6 @@ def drawTriangle(t,pos,color,level):
     t.goto(pos,level)
     t.end_fill()
 
-def drawBoard(t,wn,board):
-    wn.tracer(False)
-    t.up()
-    drawBoardEdge(t,'black',True)
-    # draw mid point
-    t.down()
-    t.pensize(3)
-    t.goto(6,0)
-    t.goto(6,6)
-    t.pensize(1)
-    t.up()
-    
-    # draw row 1 (quad 0 & 1)
-    t.goto(12,0)
-    t.down()
-    pos = 11
-    for x in range(6):
-        for color in ['tan','saddlebrown']:
-            drawTriangle(t,pos,color,0)
-            pos -= 1
-    t.up()
-    # draw row 2 (quad 2 & 3)
-    t.goto(12,6)
-    t.down()
-    pos = 11
-    for x in range(6):
-        for color in ['saddlebrown','tan']:
-            drawTriangle(t,pos,color,6)
-            pos -= 1
-    t.up()
-
-    drawBoardEdge(t,'black',False)
-    wn.tracer(True)
-
 def drawBoardEdge(t,edgeColor,fill):
     t.goto(0,0)
     t.pensize(3)
@@ -86,4 +52,33 @@ def drawBoardEdge(t,edgeColor,fill):
         t.end_fill()
     t.pensize(1)
     t.up()
-    
+
+def drawTriRow(t,color1,color2,level):
+    t.goto(12,level)
+    t.down()
+    pos = 11
+    for x in range(6):
+        for color in [color1,color2]:
+            drawTriangle(t,pos,color,level)
+            pos -= 1
+    t.up()
+
+def drawBoard(t,wn,board):
+    wn.tracer(False)
+    t.up()
+    # draw board, filled
+    drawBoardEdge(t,'black',True)
+    # draw mid point
+    t.down()
+    t.pensize(3)
+    t.goto(6,0)
+    t.goto(6,6)
+    t.pensize(1)
+    t.up()
+    # draw row 1 (quad 0 & 1)
+    drawTriRow(t,'tan','saddlebrown',0)
+    # draw row 2 (quad 2 & 3)
+    drawTriRow(t,'saddlebrown','tan',6)
+    # redraw board edge
+    drawBoardEdge(t,'black',False)
+    wn.tracer(True)
