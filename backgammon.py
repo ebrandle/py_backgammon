@@ -32,7 +32,6 @@ def main():
     white = 'tan'
     brown = 'saddlebrown'
     # drawToken(t,wn,quad,triangle,player,ringColor,board)
-    drawing.labelPlaces(t)
     #drawing.drawToken(t,wn,quad,tri,white,brown,board)
     #drawing.drawToken(t,wn,quad,tri,brown,white,board)
 

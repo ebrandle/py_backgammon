@@ -77,17 +77,36 @@ def drawTriRow(t,color1,color2,height):
             pos -= 1
     t.up()
 
-def labelPlaces(t):
+def labelQuad(t,row,quad):
+    # for each quad section, label
+    for tri in range(1,7):
+        # quad A
+        if row == 0 and quad < 6:
+            t.goto(quad,row-.2)
+            t.write(chr(row+66)+str(tri), font=("courier new",12,"bold"))
+        # quad B
+        elif row == 0 and quad > 6:
+            t.goto(quad,row-.2)
+            t.write(chr(row+65)+str(tri), font=("courier new",12,"bold"))
+        # quad C
+        elif row == 6 and quad < 6:
+            t.goto(quad,row+.5)
+            t.write(chr(row+61)+str(tri), font=("courier new",12,"bold"))
+        # quad D
+        elif row == 6 and quad > 6:
+            t.goto(quad,row+.5)
+            t.write(chr(row+62)+str(tri), font=("courier new",12,"bold"))
+        quad -= 1
+
+# draw quad/triangle labels
+def labelPlaces(t,wn):
+    wn.tracer(False)
+    t.up()
+    t.color("black","black")
     for row in [0,6]:
-        for quad in [1,2]:
-            pass
-        t.up()
-        t.color("black","black")
-        if row == 0:
-            t.goto(11.45,row-.2)
-        else:
-            t.goto(11.45,row+.5)
-        t.write(chr(row+65)+'1', font=("courier new",10,"bold"))
+        for quad in [5.45,11.45]:
+            labelQuad(t,row,quad)
+    wn.tracer(True)
     
 
 def drawBoard(t,wn,board):
@@ -108,4 +127,5 @@ def drawBoard(t,wn,board):
     drawTriRow(t,'saddlebrown','tan',6)
     # redraw board edge
     drawBoardEdge(t,'black',False)
+    labelPlaces(t,wn)
     wn.tracer(True)
