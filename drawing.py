@@ -38,17 +38,9 @@ def drawTriangle(t,pos,color,level):
 def drawBoard(t,wn,board):
     wn.tracer(False)
     t.up()
-    # draw outer edge
-    t.goto(0,0)
-    t.down()
-    t.color('black','beige')
-    t.begin_fill()
-    t.goto(0,6)
-    t.goto(12,6)
-    t.goto(12,0)
-    t.goto(0,0)
-    t.end_fill()
+    drawBoardEdge(t,'black',True)
     # draw mid point
+    t.down()
     t.pensize(3)
     t.goto(6,0)
     t.goto(6,6)
@@ -74,17 +66,24 @@ def drawBoard(t,wn,board):
             pos -= 1
     t.up()
 
-    # draw edge again
+    drawBoardEdge(t,'black',False)
+    wn.tracer(True)
+
+def drawBoardEdge(t,edgeColor,fill):
     t.goto(0,0)
     t.pensize(3)
     t.down()
-    t.color('black')
+    if fill == True:
+        t.color(edgeColor,'beige')
+        t.begin_fill()
+    else:
+        t.color(edgeColor)
     t.goto(0,6)
     t.goto(12,6)
     t.goto(12,0)
     t.goto(0,0)
+    if fill == True:
+        t.end_fill()
     t.pensize(1)
     t.up()
     
-    wn.tracer(True)
-
