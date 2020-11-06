@@ -31,6 +31,7 @@ def main():
     #print(board)
     white = 'tan'
     brown = 'saddlebrown'
+    # drawToken(t,wn,quad,triangle,player,ringColor,board)
     drawing.drawToken(t,wn,2,5,white,brown,board)
     drawing.drawToken(t,wn,0,0,brown,white,board)
 
