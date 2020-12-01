@@ -2,6 +2,17 @@
 # token, board, triangle
 # Esther Brandle
 
+class Triangle:
+    '''class for triangles'''
+    def __init__(self,color,drawStartTri,checker1):
+        self.color = color
+        self.drawStartTri = 0
+        self.checker1 = (0,0)
+
+    def addChecker(self):
+        pass
+
+
 import turtle
 
 def processLocation(quad,triangle,board):
