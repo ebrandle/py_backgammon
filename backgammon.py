@@ -22,6 +22,8 @@ def setUpBoard():
     # make logical board
     quad = ['']*6
     board = [quad[:],quad[:],quad[:],quad[:]]
+    # draw t board
+    #drawing.drawBoard(t,wn,board)
 
     return t,wn,board
 
@@ -32,7 +34,10 @@ def main():
     white = 'tan'
     brown = 'saddlebrown'
     # drawToken(t,wn,quad,triangle,player,ringColor,board)
-    #drawing.drawToken(t,wn,quad,tri,white,brown,board)
+    drawing.drawToken(t,wn,0,1,white,brown,board)
+    drawing.drawToken(t,wn,1,1,white,brown,board)
+    drawing.drawToken(t,wn,2,1,white,brown,board)
+    drawing.drawToken(t,wn,3,3,white,brown,board)
     #drawing.drawToken(t,wn,quad,tri,brown,white,board)
 
 main()

@@ -2,54 +2,77 @@
 # token, board, triangle
 # Esther Brandle
 
+import turtle
+error = "HELP! IT'S AN ERROR!"
+
+
+######################
+''' TRIANGLE CLASS '''
+######################
 class Triangle:
     '''class for triangles'''
-    def __init__(self,color,drawStartTri,checker1):
+    def __init__(self,color,drawStartTri,token1):
         self.color = color
-        self.drawStartTri = 0
-        self.checker1 = (0,0)
+        self.drawStartTri = drawStartTri
+        self.token1 = (0,0)
+        self.numTokens = 0
 
-    def addChecker(self):
-        pass
+    def addToken(self):
+        self.numTokens += 1
 
 
-import turtle
-
+###########################
+''' DRAW TOKEN ROUTINES '''
+###########################
 def processLocation(quad,triangle,board):
-    row = 0
-    col = 0
+    # A1, B1, C1, D3
+    y = 0
+    x = 0
     if quad in [0,1]:
-        row = 0
-        #if quad == 0:
-            #col = (-triangle) + 
-    else:
-        row = 11
-    
-    return row,col
+        y = 0
+        if quad == 0: #A
+            x = (6-triangle) + 6
+        else: #B
+            x = 6-triangle
+    elif quad in [2,3]:
+        y = 5
+        if quad == 2: #C
+            x = 6-triangle
+        else: #D
+            x = (6-triangle) + 6
+    return x,y
 
 def drawToken(t,wn,quad,tri,color,ringColor,board):
     board[quad][tri] = color[0]
-    print(board)
-    row,col = processLocation(quad,tri,board)
+    #print(board)
     wn.tracer(False)
+    x,y = processLocation(quad,tri,board)
     
     t.color('black',color)
     t.begin_fill()
     t.up()
-    t.goto(row+.5,col)
+    # check row
+    if y == 0:
+        t.goto(x+.5,y)
+    elif y == 5:
+        t.goto(x+.5,y)
     t.down()
     t.circle(.24)
     t.end_fill()
     t.color(ringColor)
     for size in range(1,4):
         t.up()
-        t.goto(row+.5,col+(.25-(size*.06)-.01))
+        t.goto(x+.5,y+(.25-(size*.06)-.01))
         t.down()
         t.circle(size*.06)
 
     wn.tracer(True)
     return board
 
+
+###############################
+''' DRAW BOARD SUB-ROUTINES '''
+###############################
 def drawTriangle(t,pos,color,height):
     t.color('black',color)
     t.begin_fill()
@@ -88,6 +111,10 @@ def drawTriRow(t,color1,color2,height):
             pos -= 1
     t.up()
 
+
+############################
+''' DRAW TRIANGLE LABELS '''
+############################
 def labelQuad(t,row,quad):
     # for each quad section, label
     for tri in range(1,7):
@@ -109,7 +136,6 @@ def labelQuad(t,row,quad):
             t.write(chr(row+62)+str(tri), font=("courier new",12,"bold"))
         quad -= 1
 
-# draw quad/triangle labels
 def labelPlaces(t,wn):
     wn.tracer(False)
     t.up()
@@ -118,8 +144,11 @@ def labelPlaces(t,wn):
         for quad in [5.45,11.45]:
             labelQuad(t,row,quad)
     wn.tracer(True)
-    
 
+
+#######################
+''' MAIN DRAW BOARD '''
+#######################
 def drawBoard(t,wn,board):
     wn.tracer(False)
     t.up()
@@ -136,7 +165,7 @@ def drawBoard(t,wn,board):
     drawTriRow(t,'tan','saddlebrown',0)
     # draw row 2 (quad 2 & 3)
     drawTriRow(t,'saddlebrown','tan',6)
-    # redraw board edge
+    # redraw board edge, not filled
     drawBoardEdge(t,'black',False)
     labelPlaces(t,wn)
     wn.tracer(True)
