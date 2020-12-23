@@ -3,7 +3,7 @@
 # Esther Brandle
 
 import turtle
-error = "HELP! IT'S AN ERROR!"
+#error = "HELP! IT'S AN ERROR!"
 
 
 ######################
@@ -11,14 +11,22 @@ error = "HELP! IT'S AN ERROR!"
 ######################
 class Triangle:
     '''class for triangles'''
-    def __init__(self,color,drawStartTri,token1):
+    def __init__(self,color,drawStartTri,token1Loc):
         self.color = color
         self.drawStartTri = drawStartTri
-        self.token1 = (0,0)
+        self.token1Loc = token1Loc
         self.numTokens = 0
 
     def addToken(self):
         self.numTokens += 1
+
+    def redrawTriAndTokens(self):
+        if self in [a1,a3,a5,b1,b3,b5,c2,c4,c6,d2,d4,d6]:
+            drawTriangle(t,pos,white,height)
+        else:
+            drawTriangle(t,pos,brown,height)
+        drawBoardEdge(t,'black',False)
+        for tkn in self.numTokens:
 
 
 ###########################
