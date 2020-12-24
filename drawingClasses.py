@@ -5,6 +5,7 @@
 import turtle
 error = "HELP! IT'S AN ERROR!"
 alert = "AHHH IT'S A THING!"
+success = "Yay it worked!"
 
 
 ######################
@@ -46,7 +47,7 @@ class Triangle:
         t.end_fill()
         t.up()
         wn.tracer(True)
-        
+        return success
 
     def drawTokensOnTri(self,t,wn,board):
         tmpX = self.x+.5
@@ -64,24 +65,28 @@ class Triangle:
                 tmpY -= .5
             # if more than 5 pieces, reset Y overlap X
             if tkn == 5:
-                print(self.name,alert)
+                print(self.name)
                 print('X:',self.x,tmpX)
                 print('Y:',self.y,tmpY)
                 tmpX += .25
                 tmpY = self.y
                 if self.y == 6:
                     tmpY -= .5
+        return success
     
+    def redrawTriangle(self,t,wn,board):
+        self.drawTriangle(t,wn)
+        self.drawTokensOnTri(t,wn,board)
+        drawBoardEdge(t,wn,'black',False)
+        drawMidPoint(t,wn)
 
     # Change token info
     def addToken(self):
         self.numTokens += 1
-    
     def removeToken(self):
         self.numTokens -= 1
         if self.numTokens == 0:
             self.tknCol = -1
-    
     def changeTknColor(self,newColor):
         self.tknCol = newColor
         if self.tknCol == 'tan':
@@ -159,6 +164,15 @@ def drawBoardEdge(t,wn,edgeColor,fill):
     t.up()
     wn.tracer(True)
 
+def drawMidPoint(t,wn):
+    t.up()
+    t.pensize(3)
+    t.goto(6,0)
+    t.down()
+    t.goto(6,6)
+    t.pensize(1)
+    t.up()
+
 
 ############################
 ''' DRAW TRIANGLE LABELS '''
@@ -202,19 +216,12 @@ def drawBoard(t,wn,board,triD):
     t.up()
     # draw board, filled
     drawBoardEdge(t,wn,'black',True)
-    # draw mid point
-    t.down()
-    t.pensize(3)
-    t.goto(6,0)
-    t.goto(6,6)
-    t.pensize(1)
-    t.up()
-    labelPlaces(t,wn)
-    # make triangles (and put in dictionary)
-    
+    drawMidPoint(t,wn)
+    # draw triangles
     for key in triD:
         triD[key].drawTriangle(t,wn)
-    
+    # label triangles
+    labelPlaces(t,wn)
     # redraw board edge, not filled
     drawBoardEdge(t,wn,'black',False)
     #labelPlaces(t,wn)

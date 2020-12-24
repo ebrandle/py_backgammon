@@ -70,4 +70,7 @@ def main():
             triangleD[pos].addToken()
         triangleD[pos].drawTokensOnTri(t,wn,board)
 
+    triangleD['A4'].removeToken()
+    triangleD['A4'].redrawTriangle(t,wn,board)
+
 main()
