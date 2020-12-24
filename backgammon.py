@@ -66,7 +66,7 @@ def main():
 
     for pos in ['A4']:#,'B1','C6']:
         triangleD[pos].changeTknColor(brown)
-        for x in range(6):
+        for x in range(7):
             triangleD[pos].addToken()
         triangleD[pos].drawTokensOnTri(t,wn,board)
 

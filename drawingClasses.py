@@ -37,6 +37,20 @@ class Triangle:
         t.up()
         t.goto(self.x+1,self.y)
         t.down()
+        # cover rectangle where pieces might be
+        t.color('beige')
+        t.begin_fill()
+        if self.y == 0:
+            t.goto(self.x+1,2.99)
+            t.goto(self.x,2.99)
+            t.goto(self.x,self.y)
+        else:
+            t.goto(self.x+1,3.01)
+            t.goto(self.x,3.01)
+            t.goto(self.x,self.y)
+        t.goto(self.x+1,self.y)
+        t.end_fill()
+        # draw actual triangle
         t.color('black',self.clr)
         t.begin_fill()
         if self.y == 0:
@@ -56,7 +70,6 @@ class Triangle:
             tmpY -= .5
         for tkn in range(self.numTokens):
             t.goto(tmpX,tmpY)
-            #print('Quad:',chr(ord(self.quad)-17),'Tri:',self.tri-1)
             drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
             # stack pieces up or down
             if self.y == 0:
@@ -64,14 +77,14 @@ class Triangle:
             else:
                 tmpY -= .5
             # if more than 5 pieces, reset Y overlap X
-            if tkn == 5:
+            if tkn == 4:
                 print(self.name)
-                print('X:',self.x,tmpX)
-                print('Y:',self.y,tmpY)
-                tmpX += .25
+                print(tmpX,tmpY)
+                tmpX += .2
                 tmpY = self.y
                 if self.y == 6:
                     tmpY -= .5
+                print(tmpX,tmpY)
         return success
     
     def redrawTriangle(self,t,wn,board):
@@ -175,7 +188,7 @@ def labelQuad(t,row,quad):
             t.write(chr(row+62)+str(tri), font=("courier new",12,"bold"))
         quad -= 1
 
-def labelPlaces(t,wn):
+def labelTriangles(t,wn):
     wn.tracer(False)
     t.up()
     t.color("black","black")
@@ -193,13 +206,11 @@ def drawBoard(t,wn,board,triD):
     t.up()
     # draw board, filled
     drawBoardEdge(t,wn,'black',True)
-    drawMidPoint(t,wn)
     # draw triangles
     for key in triD:
         triD[key].drawTriangle(t,wn)
-    # label triangles
-    labelPlaces(t,wn)
+    labelTriangles(t,wn)
     # redraw board edge, not filled
+    drawMidPoint(t,wn)
     drawBoardEdge(t,wn,'black',False)
-    #labelPlaces(t,wn)
     wn.tracer(True)
