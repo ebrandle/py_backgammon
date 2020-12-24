@@ -11,23 +11,54 @@ import turtle
 ######################
 class Triangle:
     '''class for triangles'''
-    def __init__(self,color,drawStartTri,token1Loc):
-        self.color = color
-        self.drawStartTri = drawStartTri
-        self.token1Loc = token1Loc
-        self.numTokens = 0
+    def __init__(self,triName,triColor,x,y):
+        # triangle information - does not change
+        self.name = triName
+        self.clr = triColor
+        self.quad = self.name[0]
+        self.tri = self.name[1]
+        self.x = x
+        self.y = y
 
+        # token info
+        self.numTokens = 0
+        self.tknCol = -1
+
+    def __str__(self):
+        print(self.name+':'+self.clr,self.x,self.y)
+
+    # Drawing triangle methods
+    def drawTriangle(self,t,wn):
+        t.up()
+        t.goto(self.x+1,self.y)
+        t.down()
+        t.color('black',self.clr)
+        t.begin_fill()
+        if self.y == 0:
+            t.goto(self.x+.5,2.8)
+        else:
+            t.goto(self.x+.5,3.2)
+        t.goto(self.x,self.y)
+        t.end_fill()
+        t.up()
+        
+
+    def drawTokensOnTri(self,t):
+        for tkn in range(self.numTokens):
+            continue
+            t.goto()
+            drawToken(t,wn,self.quad,self.tri,color,ringColor,board)
+    
+
+    # Change token info
     def addToken(self):
         self.numTokens += 1
-
-    def redrawTriAndTokens(self,pos,color,height):
-        if self in [a1,a3,a5,b1,b3,b5,c2,c4,c6,d2,d4,d6]:
-            drawTriangle(t,pos,color,height)
-        else:
-            drawTriangle(t,pos,color,height)
-        drawBoardEdge(t,'black',False)
-        for tkn in self.numTokens:
-            drawToken(t,wn,quad,tri,self.color,ringColor,board)
+    def removeToken(self):
+        self.numTokens -= 1
+        if self.numTokens == 0:
+            self.tknCol = -1
+    def changeTknColor(self,newColor):
+        self.tknCol = newColor
 
 
 ###########################
@@ -82,16 +113,6 @@ def drawToken(t,wn,quad,tri,color,ringColor,board):
 ###############################
 ''' DRAW BOARD SUB-ROUTINES '''
 ###############################
-def drawTriangle(t,pos,color,height):
-    t.color('black',color)
-    t.begin_fill()
-    if height == 0:
-        t.goto(pos+.5,2.8)
-    else:
-        t.goto(pos+.5,3.2)
-    t.goto(pos,height)
-    t.end_fill()
-
 def drawBoardEdge(t,edgeColor,fill):
     t.goto(0,0)
     t.pensize(3)
@@ -110,15 +131,34 @@ def drawBoardEdge(t,edgeColor,fill):
     t.pensize(1)
     t.up()
 
-def drawTriRow(t,color1,color2,height):
-    t.goto(12,height)
-    t.down()
-    pos = 11
-    for x in range(6):
-        for color in [color1,color2]:
-            drawTriangle(t,pos,color,height)
-            pos -= 1
-    t.up()
+def makeTriangles():
+    # init values for making triangles
+    triangles = {}
+    color = -1
+    x = -1
+    y = -1
+    for letter in ['A','B','C','D']:
+        for num in [1,2,3,4,5,6]:
+            # triangle name
+            name = letter+str(num)
+            # triangle color
+            if (letter in ['A','B'] and num in [1,3,5]) or \
+               (letter in ['C','D'] and num in [2,4,6]):
+                color = 'tan'
+            else:
+                color = 'saddlebrown'
+            # triangle x
+            if letter in ['A','D']:
+                x = 12-num
+            else:
+                x = 6-num
+            # triangle y
+            if letter in ['A','B']:
+                y = 0
+            else:
+                y = 6
+            triangles[name] = Triangle(name,color,x,y)
+    return triangles
 
 
 ############################
@@ -170,11 +210,13 @@ def drawBoard(t,wn,board):
     t.goto(6,6)
     t.pensize(1)
     t.up()
-    # draw row 1 (quad 0 & 1)
-    drawTriRow(t,'tan','saddlebrown',0)
-    # draw row 2 (quad 2 & 3)
-    drawTriRow(t,'saddlebrown','tan',6)
+    
+    # make triangles (and put in dictionary)
+    triangleD = makeTriangles()
+    for key in triangleD:
+        triangleD[key].drawTriangle(t,wn)
+    
     # redraw board edge, not filled
     drawBoardEdge(t,'black',False)
-    labelPlaces(t,wn)
+    #labelPlaces(t,wn)
     wn.tracer(True)
