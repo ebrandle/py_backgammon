@@ -98,31 +98,8 @@ class Triangle:
 ###########################
 ''' DRAW TOKEN ROUTINES '''
 ###########################
-##def processLocation(quad,triangle):
-##    # A1, B1, C1, D3
-##    y = 0
-##    x = 0
-##    if quad in [0,1]:
-##        y = 0
-##        if quad == 0: #A
-##            x = (6-triangle) + 6
-##        else: #B
-##            x = 6-triangle
-##    elif quad in [2,3]:
-##        y = 5
-##        if quad == 2: #C
-##            x = 6-triangle
-##        else: #D
-##            x = (6-triangle) + 6
-##    return x,y
-
 def drawToken(t,wn,quad,tri,color,ringColor,board,x,y):
     board[quad][tri] = color[0]
-##    changeDirection = 1
-##    if 6-y > y:
-##        changeDirection = -1
-    #x,y = processLocation(quad,tri)
-    #print(board)
     wn.tracer(False)
     t.up()
     t.color('black',color)
