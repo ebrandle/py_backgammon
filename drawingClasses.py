@@ -3,7 +3,8 @@
 # Esther Brandle
 
 import turtle
-#error = "HELP! IT'S AN ERROR!"
+error = "HELP! IT'S AN ERROR!"
+alert = "AHHH IT'S A THING!"
 
 
 ######################
@@ -16,19 +17,22 @@ class Triangle:
         self.name = triName
         self.clr = triColor
         self.quad = self.name[0]
-        self.tri = self.name[1]
+        self.tri = int(self.name[1])
         self.x = x
         self.y = y
 
         # token info
         self.numTokens = 0
-        self.tknCol = -1
+        self.tknCol = -1 #'tan'
+        self.ringCol = -1 #'saddlebrown'
 
     def __str__(self):
-        print(self.name+':'+self.clr,self.x,self.y)
+        print(self.name+':',self.clr,self.x,self.y)
+        print('Number of tokens:',self.numTokens)
 
     # Drawing triangle methods
     def drawTriangle(self,t,wn):
+        wn.tracer(False)
         t.up()
         t.goto(self.x+1,self.y)
         t.down()
@@ -41,79 +45,102 @@ class Triangle:
         t.goto(self.x,self.y)
         t.end_fill()
         t.up()
+        wn.tracer(True)
         
 
-    def drawTokensOnTri(self,t):
+    def drawTokensOnTri(self,t,wn,board):
+        tmpX = self.x+.5
+        tmpY = self.y
+        if self.y == 6:
+            tmpY -= .5
         for tkn in range(self.numTokens):
-            continue
-            t.goto()
-            drawToken(t,wn,self.quad,self.tri,color,ringColor,board)
+            t.goto(tmpX,tmpY)
+            #print('Quad:',chr(ord(self.quad)-17),'Tri:',self.tri-1)
+            drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
+            # stack pieces up or down
+            if self.y == 0:
+                tmpY += .5
+            else:
+                tmpY -= .5
+            # if more than 5 pieces, reset Y overlap X
+            if tkn == 5:
+                print(self.name,alert)
+                print('X:',self.x,tmpX)
+                print('Y:',self.y,tmpY)
+                tmpX += .25
+                tmpY = self.y
+                if self.y == 6:
+                    tmpY -= .5
     
 
     # Change token info
     def addToken(self):
         self.numTokens += 1
+    
     def removeToken(self):
         self.numTokens -= 1
         if self.numTokens == 0:
             self.tknCol = -1
+    
     def changeTknColor(self,newColor):
         self.tknCol = newColor
+        if self.tknCol == 'tan':
+            self.ringCol = 'saddlebrown'
+        else:
+            self.ringCol = 'tan'
 
 
 ###########################
 ''' DRAW TOKEN ROUTINES '''
 ###########################
-def processLocation(quad,triangle):
-    # A1, B1, C1, D3
-    y = 0
-    x = 0
-    if quad in [0,1]:
-        y = 0
-        if quad == 0: #A
-            x = (6-triangle) + 6
-        else: #B
-            x = 6-triangle
-    elif quad in [2,3]:
-        y = 5
-        if quad == 2: #C
-            x = 6-triangle
-        else: #D
-            x = (6-triangle) + 6
-    return x,y
+##def processLocation(quad,triangle):
+##    # A1, B1, C1, D3
+##    y = 0
+##    x = 0
+##    if quad in [0,1]:
+##        y = 0
+##        if quad == 0: #A
+##            x = (6-triangle) + 6
+##        else: #B
+##            x = 6-triangle
+##    elif quad in [2,3]:
+##        y = 5
+##        if quad == 2: #C
+##            x = 6-triangle
+##        else: #D
+##            x = (6-triangle) + 6
+##    return x,y
 
-def drawToken(t,wn,quad,tri,color,ringColor,board):
+def drawToken(t,wn,quad,tri,color,ringColor,board,x,y):
     board[quad][tri] = color[0]
+##    changeDirection = 1
+##    if 6-y > y:
+##        changeDirection = -1
+    #x,y = processLocation(quad,tri)
     #print(board)
     wn.tracer(False)
-    x,y = processLocation(quad,tri)
-    
+    t.up()
     t.color('black',color)
     t.begin_fill()
-    t.up()
-    # check row
-    if y == 0:
-        t.goto(x+.5,y)
-    elif y == 5:
-        t.goto(x+.5,y)
     t.down()
     t.circle(.24)
     t.end_fill()
     t.color(ringColor)
     for size in range(1,4):
         t.up()
-        t.goto(x+.5,y+(.25-(size*.06)-.01))
+        t.goto(x,y+(.25-(size*.06)-.01))
         t.down()
         t.circle(size*.06)
-
     wn.tracer(True)
+    t.up()
     return board
 
 
 ###############################
 ''' DRAW BOARD SUB-ROUTINES '''
 ###############################
-def drawBoardEdge(t,edgeColor,fill):
+def drawBoardEdge(t,wn,edgeColor,fill):
+    wn.tracer(False)
     t.goto(0,0)
     t.pensize(3)
     t.down()
@@ -130,35 +157,7 @@ def drawBoardEdge(t,edgeColor,fill):
         t.end_fill()
     t.pensize(1)
     t.up()
-
-def makeTriangles():
-    # init values for making triangles
-    triangles = {}
-    color = -1
-    x = -1
-    y = -1
-    for letter in ['A','B','C','D']:
-        for num in [1,2,3,4,5,6]:
-            # triangle name
-            name = letter+str(num)
-            # triangle color
-            if (letter in ['A','B'] and num in [1,3,5]) or \
-               (letter in ['C','D'] and num in [2,4,6]):
-                color = 'tan'
-            else:
-                color = 'saddlebrown'
-            # triangle x
-            if letter in ['A','D']:
-                x = 12-num
-            else:
-                x = 6-num
-            # triangle y
-            if letter in ['A','B']:
-                y = 0
-            else:
-                y = 6
-            triangles[name] = Triangle(name,color,x,y)
-    return triangles
+    wn.tracer(True)
 
 
 ############################
@@ -198,11 +197,11 @@ def labelPlaces(t,wn):
 #######################
 ''' MAIN DRAW BOARD '''
 #######################
-def drawBoard(t,wn,board):
+def drawBoard(t,wn,board,triD):
     wn.tracer(False)
     t.up()
     # draw board, filled
-    drawBoardEdge(t,'black',True)
+    drawBoardEdge(t,wn,'black',True)
     # draw mid point
     t.down()
     t.pensize(3)
@@ -210,13 +209,13 @@ def drawBoard(t,wn,board):
     t.goto(6,6)
     t.pensize(1)
     t.up()
-    
+    labelPlaces(t,wn)
     # make triangles (and put in dictionary)
-    triangleD = makeTriangles()
-    for key in triangleD:
-        triangleD[key].drawTriangle(t,wn)
+    
+    for key in triD:
+        triD[key].drawTriangle(t,wn)
     
     # redraw board edge, not filled
-    drawBoardEdge(t,'black',False)
+    drawBoardEdge(t,wn,'black',False)
     #labelPlaces(t,wn)
     wn.tracer(True)
