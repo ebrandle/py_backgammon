@@ -6,30 +6,6 @@ import turtle
 #error = "HELP! IT'S AN ERROR!"
 
 
-######################
-''' TRIANGLE CLASS '''
-######################
-class Triangle:
-    '''class for triangles'''
-    def __init__(self,color,drawStartTri,token1Loc):
-        self.color = color
-        self.drawStartTri = drawStartTri
-        self.token1Loc = token1Loc
-        self.numTokens = 0
-
-    def addToken(self):
-        self.numTokens += 1
-
-    def redrawTriAndTokens(self,pos,color,height):
-        if self in [a1,a3,a5,b1,b3,b5,c2,c4,c6,d2,d4,d6]:
-            drawTriangle(t,pos,color,height)
-        else:
-            drawTriangle(t,pos,color,height)
-        drawBoardEdge(t,'black',False)
-        for tkn in self.numTokens:
-            drawToken(t,wn,quad,tri,self.color,ringColor,board)
-
-
 ###########################
 ''' DRAW TOKEN ROUTINES '''
 ###########################
