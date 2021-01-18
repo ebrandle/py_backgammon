@@ -4,7 +4,8 @@
 
 import random
 import turtle
-import drawingClasses
+import bg-drawing
+import bg-dice
 
 def oldGame():
     pass
