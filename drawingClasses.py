@@ -33,6 +33,8 @@ class Triangle:
 
     # Drawing triangle methods
     def drawTriangle(self,t,wn):
+        if self.tri == 0:
+            return
         wn.tracer(False)
         t.up()
         t.goto(self.x+1,self.y)
@@ -61,10 +63,9 @@ class Triangle:
         t.end_fill()
         t.up()
         wn.tracer(True)
-        return success
 
     def drawTokensOnTri(self,t,wn,board):
-        tmpX = self.x+.5
+        tmpX = self.x+.3
         tmpY = self.y
         if self.y == 6:
             tmpY -= .5
@@ -78,13 +79,15 @@ class Triangle:
                 tmpY -= .5
             # if more than 5 pieces, reset Y overlap X
             if tkn == 4:
-                print(self.name)
-                print(tmpX,tmpY)
                 tmpX += .2
                 tmpY = self.y
                 if self.y == 6:
                     tmpY -= .5
-                print(tmpX,tmpY)
+            elif tkn == 9:
+                tmpX += .2
+                tmpY = self.y
+                if self.y == 6:
+                    tmpY -= .5
         return success
     
     def redrawTriangle(self,t,wn,board):
@@ -195,6 +198,22 @@ def labelTriangles(t,wn):
     for row in [0,6]:
         for quad in [5.45,11.45]:
             labelQuad(t,row,quad)
+
+    # label other stuff
+    t.goto(2.5,11)
+    t.write('White', font=("courier new",16,"bold"))
+    t.goto(1.2,10.5)
+    t.write('On the Bar',font=("courier new",14,"bold"))
+    t.goto(3.2,10.5)
+    t.write('Off the Board',font=("courier new",14,"bold"))
+    
+    t.goto(8.5,11)
+    t.write('Brown', font=("courier new",16,"bold"))
+    t.goto(7.2,10.5)
+    t.write('On the Bar',font=("courier new",14,"bold"))
+    t.goto(9.2,10.5)
+    t.write('Off the Board',font=("courier new",14,"bold"))
+    
     wn.tracer(True)
 
 

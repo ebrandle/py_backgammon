@@ -10,7 +10,11 @@ def oldGame():
     pass
 
 def newGame():
-    pass
+    for pos in ['A4']:
+        triangleD[pos].changeTknColor(brown)
+        for x in range(7):
+            triangleD[pos].addToken()
+        triangleD[pos].drawTokensOnTri(t,wn,board)
 
 def makeTriangles():
     # init values for making triangles
@@ -18,6 +22,7 @@ def makeTriangles():
     color = -1
     x = -1
     y = -1
+    # normal board locations
     for letter in ['A','B','C','D']:
         for num in [1,2,3,4,5,6]:
             # triangle name
@@ -39,6 +44,12 @@ def makeTriangles():
             else:
                 y = 6
             triangles[name] = drawingClasses.Triangle(name,color,x,y)
+    # on the bar
+    triangles['whiteBar'] = drawingClasses.Triangle('w0bar','beige',1.5,10)
+    triangles['brownBar'] = drawingClasses.Triangle('b0bar','beige',7.5,10)
+    # off the board
+    triangles['whiteOut'] = drawingClasses.Triangle('w0out','beige',3.5,10)
+    triangles['brownOut'] = drawingClasses.Triangle('b0out','beige',9.5,10)
     return triangles
 
 def setUpBoard():
@@ -52,25 +63,21 @@ def setUpBoard():
     quad = ['']*6
     board = [quad[:],quad[:],quad[:],quad[:]]
     triangleD = makeTriangles()
-    # draw t board
-    #drawing.drawBoard(t,wn,board)
-
     return t,wn,board,triangleD
 
 def main():
     t,wn,board,triangleD = setUpBoard()
     drawingClasses.drawBoard(t,wn,board,triangleD)
-    #print(board)
+
     white = 'tan'
     brown = 'saddlebrown'
 
-    for pos in ['A4']:#,'B1','C6']:
-        triangleD[pos].changeTknColor(brown)
-        for x in range(7):
-            triangleD[pos].addToken()
-        triangleD[pos].drawTokensOnTri(t,wn,board)
+    triangleD['A2'].changeTknColor(brown)
+    for x in range(12):
+        triangleD['A2'].addToken()
+    triangleD['A2'].drawTokensOnTri(t,wn,board)
 
-    triangleD['A4'].removeToken()
-    triangleD['A4'].redrawTriangle(t,wn,board)
+    #triangleD['A4'].removeToken()
+    #triangleD['A4'].redrawTriangle(t,wn,board)
 
 main()
