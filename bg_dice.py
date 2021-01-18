@@ -73,8 +73,8 @@ def main():
     '''
     #2 groups of dice
     print("\n")
-    whiteDice=groupOfDice(2,"tan",30,-60,280,10)
-    brownDice=groupOfDice(2,"saddlebrown",30,-60,240,10)
+    whiteDice=groupOfDice(2,"tan",30,5,7,1)
+    brownDice=groupOfDice(2,"saddlebrown",30,6.5,7,1)
     x = input('Press enter to start rolling: ')
     while x == '':
         whiteDice.rollGroup()

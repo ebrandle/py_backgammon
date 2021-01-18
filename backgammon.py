@@ -47,10 +47,10 @@ def makeTriangles():
             triangles[name] = bg_drawing.Triangle(name,color,x,y)
     # white
     triangles['whiteBar'] = bg_drawing.Triangle('E0wbar','beige',0.5,10)
-    triangles['whiteOut'] = bg_drawing.Triangle('E0wout','beige',2.25,10)
+    triangles['whiteOut'] = bg_drawing.Triangle('E0wout','beige',2.75,10)
     # brown
-    triangles['brownBar'] = bg_drawing.Triangle('E0bbar','beige',8.75,10)
-    triangles['brownOut'] = bg_drawing.Triangle('E0bout','beige',10.5,10)
+    triangles['brownBar'] = bg_drawing.Triangle('E0bbar','beige',8,10)
+    triangles['brownOut'] = bg_drawing.Triangle('E0bout','beige',10.25,10)
     return triangles
 
 def setUpBoard():
@@ -64,6 +64,10 @@ def setUpBoard():
     quad = ['']*6
     board = [quad[:],quad[:],quad[:],quad[:],['','','','']]
     triangleD = makeTriangles()
+    # make dice
+    #(numberOfDice,color,size,firstX,Y,xInterval)
+    whiteDice=bg_dice.groupOfDice(2,"tan",0.85,5,8,1)
+    brownDice=bg_dice.groupOfDice(2,"saddlebrown",0.85,6.5,8,1)
     return t,wn,board,triangleD
 
 def main():
@@ -73,13 +77,12 @@ def main():
     white = 'tan'
     brown = 'saddlebrown'
 
-    triangleD['whiteBar'].changeTknColor(brown)
-    for x in range(12):
-        triangleD['whiteBar'].addToken()
-    triangleD['whiteBar'].drawTokensOnTri(t,wn,board)
+    triangleD['brownOut'].changeTknColor(white)
+    for x in range(5):
+        triangleD['brownOut'].addToken()
+    triangleD['brownOut'].drawTokensOnTri(t,wn,board)
 
-    triangleD['whiteBar'].removeToken()
-    triangleD['whiteBar'].redrawTriangle(t,wn,board)
-    print(board)
+    #triangleD['A5'].removeToken()
+    #triangleD['A5'].redrawTriangle(t,wn,board)
 
 main()

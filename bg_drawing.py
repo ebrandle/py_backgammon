@@ -48,7 +48,7 @@ class Triangle:
         elif self.y == 6:
             t.goto(self.x+1,3.01)
             t.goto(self.x,3.01)
-        elif self.y == 10:
+        else:
             t.color('white')
             t.goto(self.x+1,7)
             t.goto(self.x,7)
@@ -64,7 +64,7 @@ class Triangle:
         elif self.y == 6:
             t.goto(self.x+.5,3.2)
             t.goto(self.x,self.y)
-        t.goto(self.x,self.y)
+        #t.goto(self.x,self.y)
         t.end_fill()
         t.up()
         wn.tracer(True)
@@ -72,14 +72,15 @@ class Triangle:
     def drawTokensOnTri(self,t,wn,board):
         tmpX = self.x+.3
         tmpY = self.y
-        if self.y == 6 or self.y == 10:
+        if self.y != 0:
             tmpY -= .5
         for tkn in range(self.numTokens):
             t.goto(tmpX,tmpY)
             if self.quad == 'E':
-                drawToken(t,wn,4,self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
+                #(t,wn,quad,tri,color,ringColor,board,x,y,numTokens)
+                drawToken(t,wn,4,self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY,str(self.numTokens))
             else:
-                drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
+                drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY,str(self.numTokens))
             # stack pieces up or down
             if self.y == 0:
                 tmpY += .5
@@ -99,31 +100,22 @@ class Triangle:
         return success
     
     def redrawTriangle(self,t,wn,board):
-        if self.tri == 0:
-            t.up()
-            t.goto(self.x+1,self.y)
-            t.down()
-            # cover rectangle where pieces might be
-            t.color('white')
-            t.begin_fill()
-            t.goto(self.x+1,7)
-            t.goto(self.x,7)
-            t.goto(self.x,self.y)
-            t.goto(self.x+1,self.y)
-            t.end_fill()
-        else:
-            self.drawTriangle(t,wn)
+        wn.tracer(False)
+        self.drawTriangle(t,wn)
         self.drawTokensOnTri(t,wn,board)
         drawBoardEdge(t,wn,'black',False)
         drawMidPoint(t,wn)
+        wn.tracer(True)
 
     # Change token info
     def addToken(self):
         self.numTokens += 1
+        
     def removeToken(self):
         self.numTokens -= 1
         if self.numTokens == 0:
             self.tknCol = -1
+            
     def changeTknColor(self,newColor):
         self.tknCol = newColor
         if self.tknCol == 'tan':
@@ -135,8 +127,13 @@ class Triangle:
 ###########################
 ''' DRAW TOKEN ROUTINES '''
 ###########################
-def drawToken(t,wn,quad,tri,color,ringColor,board,x,y):
-    board[quad][tri] = color[0]
+def drawToken(t,wn,quad,tri,color,ringColor,board,x,y,tknNum):
+    if color == 'tan':
+        board[quad][tri] = 'w'+tknNum
+    elif color == 'saddlebrown':
+        board[quad][tri] = 'b'+tknNum
+    else:
+        return error
     wn.tracer(False)
     t.up()
     t.color('black',color)
@@ -179,6 +176,7 @@ def drawBoardEdge(t,wn,edgeColor,fill):
     wn.tracer(True)
 
 def drawMidPoint(t,wn):
+    wn.tracer(False)
     t.up()
     t.pensize(3)
     t.goto(6,0)
@@ -186,6 +184,7 @@ def drawMidPoint(t,wn):
     t.goto(6,6)
     t.pensize(1)
     t.up()
+    wn.tracer(True)
 
 
 ############################
@@ -222,19 +221,21 @@ def labelTriangles(t,wn):
 
     # label other stuff
     t.goto(2.5,11.5)
-    t.write('White', font=("courier new",16,"bold"))
-    
-    t.goto(0.25,10.5)
+    t.write('White', font=("courier new",18,"bold"))
+    t.goto(0.15,10.5)
     t.write('On the Bar',font=("courier new",14,"bold"))
-    
-    t.goto(2.25,10.75)
+    t.goto(2.25,10.5)
     t.write('Off the Board',font=("courier new",14,"bold"))
-    
+    t.goto(4.85,10.5)
+    t.write('Dice',font=("courier new",14,"bold"))
+
     t.goto(8.5,11.5)
-    t.write('Brown', font=("courier new",16,"bold"))
-    t.goto(8.25,10.5)
+    t.write('Brown', font=("courier new",18,"bold"))
+    t.goto(6.6,10.5)
+    t.write('Dice',font=("courier new",14,"bold"))
+    t.goto(7.65,10.5)
     t.write('On the Bar',font=("courier new",14,"bold"))
-    t.goto(10.25,10.75)
+    t.goto(9.75,10.5)
     t.write('Off the Board',font=("courier new",14,"bold"))
     
     wn.tracer(True)
