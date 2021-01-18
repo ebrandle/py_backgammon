@@ -4,8 +4,8 @@
 
 import random
 import turtle
-import bg-drawing
-import bg-dice
+import bg_drawing
+import bg_dice
 
 def oldGame():
     pass
@@ -44,13 +44,13 @@ def makeTriangles():
                 y = 0
             else:
                 y = 6
-            triangles[name] = drawingClasses.Triangle(name,color,x,y)
-    # on the bar
-    triangles['whiteBar'] = drawingClasses.Triangle('w0bar','beige',1.5,10)
-    triangles['brownBar'] = drawingClasses.Triangle('b0bar','beige',7.5,10)
-    # off the board
-    triangles['whiteOut'] = drawingClasses.Triangle('w0out','beige',3.5,10)
-    triangles['brownOut'] = drawingClasses.Triangle('b0out','beige',9.5,10)
+            triangles[name] = bg_drawing.Triangle(name,color,x,y)
+    # white
+    triangles['whiteBar'] = bg_drawing.Triangle('E0wbar','beige',0.5,10)
+    triangles['whiteOut'] = bg_drawing.Triangle('E0wout','beige',2.25,10)
+    # brown
+    triangles['brownBar'] = bg_drawing.Triangle('E0bbar','beige',8.75,10)
+    triangles['brownOut'] = bg_drawing.Triangle('E0bout','beige',10.5,10)
     return triangles
 
 def setUpBoard():
@@ -62,23 +62,24 @@ def setUpBoard():
     wn.tracer(False)
     # make logical board
     quad = ['']*6
-    board = [quad[:],quad[:],quad[:],quad[:]]
+    board = [quad[:],quad[:],quad[:],quad[:],['','','','']]
     triangleD = makeTriangles()
     return t,wn,board,triangleD
 
 def main():
     t,wn,board,triangleD = setUpBoard()
-    drawingClasses.drawBoard(t,wn,board,triangleD)
+    bg_drawing.drawBoard(t,wn,board,triangleD)
 
     white = 'tan'
     brown = 'saddlebrown'
 
-    triangleD['A2'].changeTknColor(brown)
+    triangleD['whiteBar'].changeTknColor(brown)
     for x in range(12):
-        triangleD['A2'].addToken()
-    triangleD['A2'].drawTokensOnTri(t,wn,board)
+        triangleD['whiteBar'].addToken()
+    triangleD['whiteBar'].drawTokensOnTri(t,wn,board)
 
-    #triangleD['A4'].removeToken()
-    #triangleD['A4'].redrawTriangle(t,wn,board)
+    triangleD['whiteBar'].removeToken()
+    triangleD['whiteBar'].redrawTriangle(t,wn,board)
+    print(board)
 
 main()

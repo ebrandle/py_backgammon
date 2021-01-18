@@ -33,8 +33,8 @@ class Triangle:
 
     # Drawing triangle methods
     def drawTriangle(self,t,wn):
-        if self.tri == 0:
-            return
+        #if self.tri == 0:
+        #    return
         wn.tracer(False)
         t.up()
         t.goto(self.x+1,self.y)
@@ -45,11 +45,14 @@ class Triangle:
         if self.y == 0:
             t.goto(self.x+1,2.99)
             t.goto(self.x,2.99)
-            t.goto(self.x,self.y)
-        else:
+        elif self.y == 6:
             t.goto(self.x+1,3.01)
             t.goto(self.x,3.01)
-            t.goto(self.x,self.y)
+        elif self.y == 10:
+            t.color('white')
+            t.goto(self.x+1,7)
+            t.goto(self.x,7)
+        t.goto(self.x,self.y)
         t.goto(self.x+1,self.y)
         t.end_fill()
         # draw actual triangle
@@ -57,8 +60,10 @@ class Triangle:
         t.begin_fill()
         if self.y == 0:
             t.goto(self.x+.5,2.8)
-        else:
+            t.goto(self.x,self.y)
+        elif self.y == 6:
             t.goto(self.x+.5,3.2)
+            t.goto(self.x,self.y)
         t.goto(self.x,self.y)
         t.end_fill()
         t.up()
@@ -67,11 +72,14 @@ class Triangle:
     def drawTokensOnTri(self,t,wn,board):
         tmpX = self.x+.3
         tmpY = self.y
-        if self.y == 6:
+        if self.y == 6 or self.y == 10:
             tmpY -= .5
         for tkn in range(self.numTokens):
             t.goto(tmpX,tmpY)
-            drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
+            if self.quad == 'E':
+                drawToken(t,wn,4,self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
+            else:
+                drawToken(t,wn,int(chr(ord(self.quad)-17)),self.tri-1,self.tknCol,self.ringCol,board,tmpX,tmpY)
             # stack pieces up or down
             if self.y == 0:
                 tmpY += .5
@@ -81,17 +89,30 @@ class Triangle:
             if tkn == 4:
                 tmpX += .2
                 tmpY = self.y
-                if self.y == 6:
+                if self.y != 0:
                     tmpY -= .5
             elif tkn == 9:
                 tmpX += .2
                 tmpY = self.y
-                if self.y == 6:
+                if self.y != 0:
                     tmpY -= .5
         return success
     
     def redrawTriangle(self,t,wn,board):
-        self.drawTriangle(t,wn)
+        if self.tri == 0:
+            t.up()
+            t.goto(self.x+1,self.y)
+            t.down()
+            # cover rectangle where pieces might be
+            t.color('white')
+            t.begin_fill()
+            t.goto(self.x+1,7)
+            t.goto(self.x,7)
+            t.goto(self.x,self.y)
+            t.goto(self.x+1,self.y)
+            t.end_fill()
+        else:
+            self.drawTriangle(t,wn)
         self.drawTokensOnTri(t,wn,board)
         drawBoardEdge(t,wn,'black',False)
         drawMidPoint(t,wn)
@@ -200,18 +221,20 @@ def labelTriangles(t,wn):
             labelQuad(t,row,quad)
 
     # label other stuff
-    t.goto(2.5,11)
+    t.goto(2.5,11.5)
     t.write('White', font=("courier new",16,"bold"))
-    t.goto(1.2,10.5)
+    
+    t.goto(0.25,10.5)
     t.write('On the Bar',font=("courier new",14,"bold"))
-    t.goto(3.2,10.5)
+    
+    t.goto(2.25,10.75)
     t.write('Off the Board',font=("courier new",14,"bold"))
     
-    t.goto(8.5,11)
+    t.goto(8.5,11.5)
     t.write('Brown', font=("courier new",16,"bold"))
-    t.goto(7.2,10.5)
+    t.goto(8.25,10.5)
     t.write('On the Bar',font=("courier new",14,"bold"))
-    t.goto(9.2,10.5)
+    t.goto(10.25,10.75)
     t.write('Off the Board',font=("courier new",14,"bold"))
     
     wn.tracer(True)

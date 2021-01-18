@@ -61,6 +61,7 @@ class groupOfDice(Dice):
 # Main #
 ########
 def main():
+    '''
     #Two dice, one white, one red, no group of dice
     die1=Dice("tan",30,100,100)
     die2=Dice("saddlebrown",30,200,200)
@@ -68,15 +69,16 @@ def main():
         die1.rollDie()
         die2.rollDie()
         input('All dice have been rolled. Press enter to roll again: ')
-
+    '''
+    '''
     #2 groups of dice
     print("\n")
-    attackDice=groupOfDice(3,"salmon",30,-60,280,10)
-    defendDice=groupOfDice(3,"lightblue",30,-60,240,10)
+    whiteDice=groupOfDice(2,"tan",30,-60,280,10)
+    brownDice=groupOfDice(2,"saddlebrown",30,-60,240,10)
     x = input('Press enter to start rolling: ')
     while x == '':
-        attackDice.rollGroup()
-        defendDice.rollGroup()
+        whiteDice.rollGroup()
+        brownDice.rollGroup()
         x = input('All groups of dice have been rolled. Press enter to roll again: ')
-        
+    '''
 main()
