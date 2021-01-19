@@ -240,10 +240,10 @@ def labelTriangles(t,wn):
     
     wn.tracer(True)
 
-def drawDiceBG(t,start):
+def drawDiceBG(t,wn,start):
     t.up()
     t.st()
-    wn.tracer(True)
+    wn.tracer(False)
     t.goto(start,10)
     t.down()
     t.color('beige')
@@ -253,7 +253,7 @@ def drawDiceBG(t,start):
     t.goto(start+1,10)
     t.end_fill()
     t.ht()
-    wn.tracer(False)
+    wn.tracer(True)
     t.up()
 
 #######################
@@ -274,6 +274,6 @@ def drawBoard(t,wn,board,triD):
 
     # draw dice background
     for start in [4.7,6.4]:
-        drawDiceBG(t,start)
+        drawDiceBG(t,wn,start)
     
     wn.tracer(True)

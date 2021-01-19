@@ -66,18 +66,16 @@ def setUpBoard():
     triangleD = makeTriangles()
     # make dice
     #(numberOfDice,color,size,firstX,Y,yInterval)
-    whiteDice=bg_dice.groupOfDice(2,"tan",4.75,8,1)
-    brownDice=bg_dice.groupOfDice(2,"saddlebrown",6.6,8,1)
+    whiteDice=bg_dice.groupOfDice(wn,2,"tan",4.85,8.15,0.65)
+    brownDice=bg_dice.groupOfDice(wn,2,"saddlebrown",6.55,8.15,0.65)
     return t,wn,board,triangleD,whiteDice,brownDice
 
 def main():
     t,wn,board,triangleD,whiteDice,brownDice = setUpBoard()
     bg_drawing.drawBoard(t,wn,board,triangleD)
-    for die in whiteDice.group:
-        #print(die)
-        die.drawDie()
-    for die in brownDice.group:
-        die.drawDie()
+    
+    whiteDice.rollGroup(wn)
+    brownDice.rollGroup(wn)
 
     white = 'tan'
     brown = 'saddlebrown'

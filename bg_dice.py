@@ -14,14 +14,16 @@ class Dice:
         self.X=lowerLeftX
         self.Y=lowerLeftY
         self.value=0
-        # die turtle & color
+        # die turtle & status
         self.t=turtle.Turtle()
         self.t.color('black',self.color)
+        self.t.hideturtle()
         # default draw die
-        self.drawDie()
+        #self.drawDie(wn)
 
-    def drawDie(self):
+    def drawDie(self,wn):
         # prepare
+        wn.tracer(False)
         self.t.up()
         self.t.goto(self.X,self.Y)
         self.t.down()
@@ -33,14 +35,15 @@ class Dice:
         # prepare
         self.t.end_fill()
         self.t.up()
-        self.t.goto(self.X+(0.65/2.25),self.Y-(0.65/1.3))
+        self.t.goto(self.X+(0.65/2.25),self.Y-0.15)
+        wn.tracer(True)
         # write number
         if self.value != 0:
             self.t.write(str(self.value),font=('Arial','14','normal'))
 
-    def rollDie(self):
+    def rollDie(self,wn):
         self.value = random.randint(1,6)
-        self.drawDie()
+        self.drawDie(wn)
 
 #################
 # Group of dice #
@@ -52,32 +55,21 @@ class groupOfDice(Dice):
         self.startY=firstY
         self.X=X
         for i in range(1,number+1):
-            self.group.append(Dice(wn,name,color,X,self.startY))
+            self.group.append(Dice(wn,color+str(i),color,X,self.startY))
             self.startY += (0.65 + self.yInterval)
         
-    def rollGroup(self):
+    def rollGroup(self,wn):
         for die in self.group:
-            Dice.rollDie(die)
+            Dice.rollDie(die,wn)
 
 #########################
 # Example dice creation #
 #########################
 '''
-#Two dice, one white, one red, no group of dice
-die1=Dice("tan",30,100,100)
-die2=Dice("saddlebrown",30,200,200)
-for i in range(2):
-    die1.rollDie()
-    die2.rollDie()
-    input('All dice have been rolled. Press enter to roll again: ')
-
-
-#2 groups of dice
-whiteDice=groupOfDice(2,"tan",30,5,7,1)
-brownDice=groupOfDice(2,"saddlebrown",30,6.5,7,1)
+# 2 groups of dice
+whiteDice=groupOfDice(wn,2,"tan",5,7,1)
 x = input('Press enter to start rolling: ')
 while x == '':
-    whiteDice.rollGroup()
-    brownDice.rollGroup()
+    whiteDice.rollGroup(wn)
     x = input('All groups of dice have been rolled. Press enter to roll again: ')
 '''
