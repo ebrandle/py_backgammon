@@ -10,11 +10,20 @@ import bg_dice
 def oldGame():
     pass
 
-def newGame():
-    for pos in ['A4']:
+def newGame(t,wn,board,triangleD,whiteDice,brownDice,white,brown):
+    for pos in ['A1','B6','C2','D6']:
+        triangleD[pos].changeTknColor(white)
+        if pos == 'A1':triangleD[pos].numTokens = 2
+        if pos == 'B6':triangleD[pos].numTokens = 5
+        if pos == 'C2':triangleD[pos].numTokens = 3
+        if pos == 'D6':triangleD[pos].numTokens = 5
+        triangleD[pos].drawTokensOnTri(t,wn,board)
+    for pos in ['A6','B2','C6','D1']:
         triangleD[pos].changeTknColor(brown)
-        for x in range(7):
-            triangleD[pos].addToken()
+        if pos == 'A6':triangleD[pos].numTokens = 5
+        if pos == 'B2':triangleD[pos].numTokens = 3
+        if pos == 'C6':triangleD[pos].numTokens = 5
+        if pos == 'D1':triangleD[pos].numTokens = 2
         triangleD[pos].drawTokensOnTri(t,wn,board)
 
 def makeTriangles():
@@ -65,7 +74,7 @@ def setUpBoard():
     board = [quad[:],quad[:],quad[:],quad[:],['','','','']]
     triangleD = makeTriangles()
     # make dice
-    #(numberOfDice,color,size,firstX,Y,yInterval)
+    #(wn,numberOfDice,color,X,firstY,yInterval)
     whiteDice=bg_dice.groupOfDice(wn,2,"tan",4.85,8.15,0.65)
     brownDice=bg_dice.groupOfDice(wn,2,"saddlebrown",6.55,8.15,0.65)
     return t,wn,board,triangleD,whiteDice,brownDice
@@ -73,19 +82,17 @@ def setUpBoard():
 def main():
     t,wn,board,triangleD,whiteDice,brownDice = setUpBoard()
     bg_drawing.drawBoard(t,wn,board,triangleD)
+    white = 'tan'
+    brown = 'saddlebrown'
+    newGame(t,wn,board,triangleD,whiteDice,brownDice,white,brown)
     
     whiteDice.rollGroup(wn)
     brownDice.rollGroup(wn)
-    brownDice.rollGroup(wn)
-    brownDice.rollGroup(wn)
 
-    white = 'tan'
-    brown = 'saddlebrown'
-
-    triangleD['brownOut'].changeTknColor(white)
-    for x in range(5):
-        triangleD['brownOut'].addToken()
-    triangleD['brownOut'].drawTokensOnTri(t,wn,board)
+    #triangleD['brownOut'].changeTknColor(brown)
+    #for x in range(5):
+    #    triangleD['brownOut'].addToken()
+    #triangleD['brownOut'].drawTokensOnTri(t,wn,board)
 
     #triangleD['A5'].removeToken()
     #triangleD['A5'].redrawTriangle(t,wn,board)
