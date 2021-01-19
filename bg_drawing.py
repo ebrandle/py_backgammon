@@ -240,6 +240,21 @@ def labelTriangles(t,wn):
     
     wn.tracer(True)
 
+def drawDiceBG(t,start):
+    t.up()
+    t.st()
+    wn.tracer(True)
+    t.goto(start,10)
+    t.down()
+    t.color('beige')
+    t.begin_fill()
+    t.goto(start,7)
+    t.goto(start+1,7)
+    t.goto(start+1,10)
+    t.end_fill()
+    t.ht()
+    wn.tracer(False)
+    t.up()
 
 #######################
 ''' MAIN DRAW BOARD '''
@@ -256,4 +271,9 @@ def drawBoard(t,wn,board,triD):
     # redraw board edge, not filled
     drawMidPoint(t,wn)
     drawBoardEdge(t,wn,'black',False)
+
+    # draw dice background
+    for start in [4.7,6.4]:
+        drawDiceBG(t,start)
+    
     wn.tracer(True)

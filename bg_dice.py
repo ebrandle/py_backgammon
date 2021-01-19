@@ -1,84 +1,83 @@
 import turtle
 import random
-import time
+#import time
 
 ##############
 # Single die #
 ##############
 class Dice:
-    def __init__(self,color,size,ulx,uly):
+    
+    def __init__(self,wn,name,color,lowerLeftX,lowerLeftY):
+        # die information
+        self.name=name
         self.color=color
-        self.size=size
-        self.upperLeftX=ulx
-        self.upperLeftY=uly
-        self.wn=turtle.Screen()
-        self.t=turtle.Turtle()
-        self.t.color('black',color)
-        self.t.hideturtle()
-        self.t.up()
-        self.t.goto(self.upperLeftX,self.upperLeftY)
-        self.t.down()
+        self.X=lowerLeftX
+        self.Y=lowerLeftY
         self.value=0
+        # die turtle & color
+        self.t=turtle.Turtle()
+        self.t.color('black',self.color)
+        # default draw die
         self.drawDie()
 
     def drawDie(self):
+        # prepare
+        self.t.up()
+        self.t.goto(self.X,self.Y)
+        self.t.down()
         self.t.begin_fill()
+        # draw square
         for x in range(4):
-            self.t.fd(self.size)
+            self.t.fd(.65)
             self.t.right(90)
+        # prepare
         self.t.end_fill()
         self.t.up()
-        self.t.goto(self.upperLeftX+self.size/2.25,self.upperLeftY-self.size/1.3)
+        self.t.goto(self.X+(0.65/2.25),self.Y-(0.65/1.3))
+        # write number
         if self.value != 0:
-            self.t.write(str(self.value),font=('Arial','14','normal'))        
-    
+            self.t.write(str(self.value),font=('Arial','14','normal'))
+
     def rollDie(self):
         self.value = random.randint(1,6)
-        self.t.up()
-        self.t.goto(self.upperLeftX,self.upperLeftY)
-        self.t.down()
         self.drawDie()
 
 #################
 # Group of dice #
 #################
 class groupOfDice(Dice):
-    def __init__(self,number,color,size,firstX,Y,xInterval):
+    def __init__(self,wn,number,color,X,firstY,yInterval):
         self.group=[]
-        self.xInterval=xInterval
-        self.startLeft=firstX
-        self.size=size
-        x=firstX
+        self.yInterval=yInterval
+        self.startY=firstY
+        self.X=X
         for i in range(1,number+1):
-            self.group.append(Dice(color,size,self.startLeft,Y))
-            self.startLeft += (size + self.xInterval)
+            self.group.append(Dice(wn,name,color,X,self.startY))
+            self.startY += (0.65 + self.yInterval)
         
     def rollGroup(self):
         for die in self.group:
             Dice.rollDie(die)
 
-########
-# Main #
-########
-def main():
-    '''
-    #Two dice, one white, one red, no group of dice
-    die1=Dice("tan",30,100,100)
-    die2=Dice("saddlebrown",30,200,200)
-    for i in range(2):
-        die1.rollDie()
-        die2.rollDie()
-        input('All dice have been rolled. Press enter to roll again: ')
-    '''
-    '''
-    #2 groups of dice
-    print("\n")
-    whiteDice=groupOfDice(2,"tan",30,5,7,1)
-    brownDice=groupOfDice(2,"saddlebrown",30,6.5,7,1)
-    x = input('Press enter to start rolling: ')
-    while x == '':
-        whiteDice.rollGroup()
-        brownDice.rollGroup()
-        x = input('All groups of dice have been rolled. Press enter to roll again: ')
-    '''
-main()
+#########################
+# Example dice creation #
+#########################
+'''
+#Two dice, one white, one red, no group of dice
+die1=Dice("tan",30,100,100)
+die2=Dice("saddlebrown",30,200,200)
+for i in range(2):
+    die1.rollDie()
+    die2.rollDie()
+    input('All dice have been rolled. Press enter to roll again: ')
+
+
+#2 groups of dice
+whiteDice=groupOfDice(2,"tan",30,5,7,1)
+brownDice=groupOfDice(2,"saddlebrown",30,6.5,7,1)
+x = input('Press enter to start rolling: ')
+while x == '':
+    whiteDice.rollGroup()
+    brownDice.rollGroup()
+    x = input('All groups of dice have been rolled. Press enter to roll again: ')
+'''

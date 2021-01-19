@@ -46,11 +46,11 @@ def makeTriangles():
                 y = 6
             triangles[name] = bg_drawing.Triangle(name,color,x,y)
     # white
-    triangles['whiteBar'] = bg_drawing.Triangle('E0wbar','beige',0.5,10)
-    triangles['whiteOut'] = bg_drawing.Triangle('E0wout','beige',2.75,10)
+    triangles['whiteBar'] = bg_drawing.Triangle('E0wBar','beige',0.5,10)
+    triangles['whiteOut'] = bg_drawing.Triangle('E0wOut','beige',2.75,10)
     # brown
-    triangles['brownBar'] = bg_drawing.Triangle('E0bbar','beige',8,10)
-    triangles['brownOut'] = bg_drawing.Triangle('E0bout','beige',10.25,10)
+    triangles['brownBar'] = bg_drawing.Triangle('E0bBar','beige',8,10)
+    triangles['brownOut'] = bg_drawing.Triangle('E0bOut','beige',10.25,10)
     return triangles
 
 def setUpBoard():
@@ -65,14 +65,19 @@ def setUpBoard():
     board = [quad[:],quad[:],quad[:],quad[:],['','','','']]
     triangleD = makeTriangles()
     # make dice
-    #(numberOfDice,color,size,firstX,Y,xInterval)
-    whiteDice=bg_dice.groupOfDice(2,"tan",0.85,5,8,1)
-    brownDice=bg_dice.groupOfDice(2,"saddlebrown",0.85,6.5,8,1)
-    return t,wn,board,triangleD
+    #(numberOfDice,color,size,firstX,Y,yInterval)
+    whiteDice=bg_dice.groupOfDice(2,"tan",4.75,8,1)
+    brownDice=bg_dice.groupOfDice(2,"saddlebrown",6.6,8,1)
+    return t,wn,board,triangleD,whiteDice,brownDice
 
 def main():
-    t,wn,board,triangleD = setUpBoard()
+    t,wn,board,triangleD,whiteDice,brownDice = setUpBoard()
     bg_drawing.drawBoard(t,wn,board,triangleD)
+    for die in whiteDice.group:
+        #print(die)
+        die.drawDie()
+    for die in brownDice.group:
+        die.drawDie()
 
     white = 'tan'
     brown = 'saddlebrown'
