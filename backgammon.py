@@ -76,6 +76,8 @@ def main():
     
     whiteDice.rollGroup(wn)
     brownDice.rollGroup(wn)
+    brownDice.rollGroup(wn)
+    brownDice.rollGroup(wn)
 
     white = 'tan'
     brown = 'saddlebrown'

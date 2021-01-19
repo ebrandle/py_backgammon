@@ -49,7 +49,7 @@ class Triangle:
             t.goto(self.x+1,3.01)
             t.goto(self.x,3.01)
         else:
-            t.color('white')
+            #t.color('white')
             t.goto(self.x+1,7)
             t.goto(self.x,7)
         t.goto(self.x,self.y)
@@ -64,7 +64,7 @@ class Triangle:
         elif self.y == 6:
             t.goto(self.x+.5,3.2)
             t.goto(self.x,self.y)
-        #t.goto(self.x,self.y)
+        t.goto(self.x,self.y)
         t.end_fill()
         t.up()
         wn.tracer(True)
