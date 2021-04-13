@@ -233,10 +233,10 @@ def labelTriangles(t,wn):
     t.write('Brown', font=("courier new",18,"bold"))
     t.goto(6.6,10.5)
     t.write('Dice',font=("courier new",14,"bold"))
-    t.goto(7.65,10.5)
-    t.write('On the Bar',font=("courier new",14,"bold"))
-    t.goto(9.75,10.5)
+    t.goto(7.75,10.5)
     t.write('Off the Board',font=("courier new",14,"bold"))
+    t.goto(10.25,10.5)
+    t.write('On the Bar',font=("courier new",14,"bold"))
     
     wn.tracer(True)
 

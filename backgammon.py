@@ -10,7 +10,7 @@ import bg_dice
 def oldGame():
     pass
 
-def newGame(t,wn,board,triangleD,whiteDice,brownDice,white,brown):
+def newGame(t,wn,board,triangleD,white,brown):
     for pos in ['A1','B6','C2','D6']:
         triangleD[pos].changeTknColor(white)
         if pos == 'A1':triangleD[pos].numTokens = 2
@@ -58,8 +58,8 @@ def makeTriangles():
     triangles['whiteBar'] = bg_drawing.Triangle('E0wBar','beige',0.5,10)
     triangles['whiteOut'] = bg_drawing.Triangle('E0wOut','beige',2.75,10)
     # brown
-    triangles['brownBar'] = bg_drawing.Triangle('E0bBar','beige',8,10)
-    triangles['brownOut'] = bg_drawing.Triangle('E0bOut','beige',10.25,10)
+    triangles['brownOut'] = bg_drawing.Triangle('E0bOut','beige',8.5,10)
+    triangles['brownBar'] = bg_drawing.Triangle('E0bBar','beige',10.5,10)
     return triangles
 
 def setUpBoard():
@@ -74,17 +74,17 @@ def setUpBoard():
     board = [quad[:],quad[:],quad[:],quad[:],['','','','']]
     triangleD = makeTriangles()
     # make dice
-    #(wn,numberOfDice,color,X,firstY,yInterval)
     whiteDice=bg_dice.groupOfDice(wn,2,"tan",4.85,8.15,0.65)
     brownDice=bg_dice.groupOfDice(wn,2,"saddlebrown",6.55,8.15,0.65)
-    return t,wn,board,triangleD,whiteDice,brownDice
-
-def main():
-    t,wn,board,triangleD,whiteDice,brownDice = setUpBoard()
-    bg_drawing.drawBoard(t,wn,board,triangleD)
+    # other stuff
     white = 'tan'
     brown = 'saddlebrown'
-    newGame(t,wn,board,triangleD,whiteDice,brownDice,white,brown)
+    return t,wn,board,triangleD,whiteDice,brownDice,white,brown
+
+def main():
+    t,wn,board,triangleD,whiteDice,brownDice,white,brown = setUpBoard()
+    bg_drawing.drawBoard(t,wn,board,triangleD)
+    newGame(t,wn,board,triangleD,white,brown)
     
     whiteDice.rollGroup(wn)
     brownDice.rollGroup(wn)
