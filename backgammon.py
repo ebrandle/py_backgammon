@@ -90,12 +90,25 @@ def main():
     whiteDice.rollGroup(wn)
     brownDice.rollGroup(wn)
 
-    #triangleD['brownOut'].changeTknColor(brown)
-    #for x in range(5):
-    #    triangleD['brownOut'].addToken()
-    #triangleD['brownOut'].drawTokensOnTri(t,wn,board)
-
+    #print(board)
+    color = white
+    inColor = input("Team colour: ").lower()
+    if inColor == "brown" or inColor == "black":
+        color = brown
+    move = input("Move token from x to y (ex A1:A2): ").upper()
+    while move != "Q":
+        old = move[:2]
+        new = move[3:]
+        print(old+":"+new)
+        triangleD[new].changeTknColor(color)
+        triangleD[new].addToken(t,wn,board)
+        triangleD[old].removeToken(t,wn,board)
+        
+        # next turn
+        move = input("Move token from x to y (ex A1:A2): ").upper()
+        if color == white:
+            color = brown
+    
     #triangleD['A5'].removeToken()
-    #triangleD['A5'].redrawTriangle(t,wn,board)
 
 main()

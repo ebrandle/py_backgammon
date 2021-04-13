@@ -4,7 +4,7 @@
 
 import turtle
 error = "HELP! IT'S AN ERROR!"
-alert = "AHHH IT'S A THING!"
+alert = "Well, it technically ran."
 success = "Yay it worked!"
 
 
@@ -113,13 +113,18 @@ class Triangle:
         wn.tracer(True)
 
     # Change token info
-    def addToken(self):
+    def addToken(self,t,wn,board):
         self.numTokens += 1
+        if self.numTokens == 6 or self.numTokens == 11:
+            self.redrawTriangle(t,wn,board)
+        else:
+            self.drawTokensOnTri(t,wn,board)
         
-    def removeToken(self):
+    def removeToken(self,t,wn,board):
         self.numTokens -= 1
         if self.numTokens == 0:
             self.tknCol = -1
+        self.redrawTriangle(t,wn,board)
             
     def changeTknColor(self,newColor):
         self.tknCol = newColor
