@@ -8,9 +8,15 @@ import turtle
 import bg_drawing
 import bg_dice
 
+#########################
+""" CONTINUE OLD GAME """
+#########################
 def oldGame():
-    pass
+    return
 
+######################
+""" START NEW GAME """
+######################
 def newGame(t,wn,board,triangleD,white,brown):
     for pos in ['A1','B6','C2','D6']:
         triangleD[pos].changeTknColor(white)
@@ -27,6 +33,9 @@ def newGame(t,wn,board,triangleD,white,brown):
         if pos == 'D1':triangleD[pos].numTokens = 2
         triangleD[pos].drawTokensOnTri(t,wn,board)
 
+####################
+""" SET UP BOARD """
+####################
 def makeTriangles():
     # init values for making triangles
     triangles = {}
@@ -82,6 +91,53 @@ def setUpBoard():
     brown = 'saddlebrown'
     return t,wn,board,triangleD,whiteDice,brownDice,white,brown
 
+######################
+""" GAMEPLAY LOGIC """
+######################
+def validateMove(old,new,player,whiteDice,brownDice,triangleD):
+    no = "Invalid"
+    yes = "Valid"
+    boardLs = ["A1","A2","A3","A4","A5","A6",\
+                "B1","B2","B3","B4","B5","B6",\
+                "C6","C5","C4","C3","C2","C1",\
+                "D6","D5","D4","D3","D2","D1"]
+
+    ### Basic token validation ###
+    # if old is empty or new is full
+    if triangleD[old].numTokens == 0:
+        return no
+    if triangleD[new].numTokens == 15:
+        return no
+    # if old has invalid token color
+    if triangleD[old].tknCol == -1:
+        return no
+    # if new is 2+ and new/old colors don't match
+    if triangleD[new].numTokens > 1 and \
+       triangleD[new].tknCol != triangleD[old].tknCol:
+        return no
+
+    ### Move validation ###
+    # setup
+    posOld = -1
+    posNew = -1
+    for i in range(len(boardLs)):
+        if boardLs[i] == old:
+            posOld = i
+        if boardLs[i] == new:
+            posNew = i
+    distance = posOld-posNew
+    dice = whiteDice
+    if player != "tan":
+        dice = brownDice
+    dieVal = []
+    for die in dice.group:
+        dieVal.append(die.value)
+    # if not valid dice roll
+    if abs(distance) not in dieVal:
+        return no
+            
+    return yes
+
 def main():
     t,wn,board,triangleD,whiteDice,brownDice,white,brown = setUpBoard()
     bg_drawing.drawBoard(t,wn,board,triangleD)
@@ -92,23 +148,33 @@ def main():
 
     #print(board)
     color = white
-    inColor = input("Team colour: ").lower()
-    if inColor == "brown" or inColor == "black":
+    initColor = input("Team colour: ").lower()
+    if initColor == "brown" or initColor == "black":
         color = brown
     move = input("Move token from x to y (ex A1:A2): ").upper()
     while move != "Q":
         old = move[:2]
         new = move[3:]
-        print(old+":"+new)
+        status = validateMove(old,new,color,whiteDice,brownDice,triangleD)
+        if status == "Invalid":
+            print("Invalid move; please try again.")
+            if color == white:
+                move = input("Player White's turn: ").upper()
+            else:
+                move = input("Player Brown's turn: ").upper()
+            continue
         triangleD[new].changeTknColor(color)
         triangleD[new].addToken(t,wn,board)
         triangleD[old].removeToken(t,wn,board)
         
         # next turn
-        move = input("Move token from x to y (ex A1:A2): ").upper()
         if color == white:
             color = brown
-    
-    #triangleD['A5'].removeToken()
+            brownDice.rollGroup(wn)
+            move = input("Player Brown's turn: ").upper()
+        elif color == brown:
+            color = white
+            whiteDice.rollGroup(wn)
+            move = input("Player White's turn: ").upper()
 
 main()
