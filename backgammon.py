@@ -1,5 +1,6 @@
 # Side Project - Backgammon
 # Started Nov 4, 2020
+# Visual aspects complete Apr 13, 2021
 # Esther Brandle
 
 import random
