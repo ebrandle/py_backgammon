@@ -70,7 +70,12 @@ class Triangle:
         wn.tracer(True)
 
     def drawTokensOnTri(self,t,wn,board):
-        tmpX = self.x+.3
+        if self.numTokens <=5: #0-5
+            tmpX = self.x+.5
+        elif self.numTokens <=10: #6-10
+            tmpX = self.x+.4
+        elif self.numTokens >=5: #11-15
+            tmpX = self.x+.3
         tmpY = self.y
         if self.y != 0:
             tmpY -= .5
