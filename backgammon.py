@@ -109,55 +109,59 @@ def tokenValid(old,new,triangleD,yes,no):
         return no
     return yes
 
-def moveValid(old,new,distance,player,diceValues,triangleD,yes,no):
+def moveValid(old,new,distance,diceList,player,triangleD,yes,no):
     # if not valid dice roll
-    if abs(distance) not in diceValues:
+    if abs(distance) not in diceList:
         return no
     # if attempting to move other player's piece
     if triangleD[old].tknCol != player:
         return no
     return yes
 
-def validateMove(old,new,player,whiteDice,brownDice,triangleD):
+def validateMove(old,new,distance,diceList,player,triangleD):
     # some setup
     no = "Invalid"
     yes = "Valid"
-    boardLs = ["A1","A2","A3","A4","A5","A6",\
-                "B1","B2","B3","B4","B5","B6",\
-                "C6","C5","C4","C3","C2","C1",\
-                "D6","D5","D4","D3","D2","D1"]
 
     ### Basic token validation ###
     if tokenValid(old,new,triangleD,yes,no) == no:
         return no
+    
+    ### Move validation ###
+    if moveValid(old,new,distance,diceList,player,triangleD,yes,no) == no:
+        return no
+    
+    return yes
 
-    # more setup
-    # calculate distance for token move
+def distanceOfMove(old,new):
+    boardLs = ["A1","A2","A3","A4","A5","A6",\
+               "B1","B2","B3","B4","B5","B6",\
+               "C6","C5","C4","C3","C2","C1",\
+               "D6","D5","D4","D3","D2","D1"]
     posOld = -1
     posNew = -1
+    # calculate distance for token move
     for i in range(len(boardLs)):
         if boardLs[i] == old:
             posOld = i
         if boardLs[i] == new:
             posNew = i
     distance = posOld-posNew
-    # put correct dice values in list
+    return distance
+
+def availableDiceList(whiteDice,brownDice,player):
+    # add dice values to list
     dice = whiteDice
     if player != "tan":
         dice = brownDice
-    diceValues = []
+    diceList = []
     for die in dice.group:
-        diceValues.append(die.value)
+        diceList.append(die.value)
     # if doubles, add 2 more
-    if diceValues[0] == diceValues[1]:
-        diceValues.append(diceValues[0])
-        diceValues.append(diceValues[0])
-    
-    ### Move validation ###
-    if moveValid(old,new,distance,player,diceValues,triangleD,yes,no) == no:
-        return no
-    
-    return yes
+    if diceList[0] == diceList[1]:
+        diceList.append(diceList[0])
+        diceList.append(diceList[0])
+    return diceList
 
 def main():
     # create + draw board
@@ -174,13 +178,18 @@ def main():
     firstPlayer = input("Player colour: ").lower()
     if firstPlayer == "brown" or firstPlayer == "black":
         player = brown
+    # find available dice
+    diceList = availableDiceList(whiteDice,brownDice,player)
+    print(player,"dice:",diceList)
     # make first move or "q" to quit game
     move = input("Move token from x to y (ex A1:A2): ").upper()
     while move != "Q":
         old = move[:2]
         new = move[3:]
+        # calculate move distance
+        distance = distanceOfMove(old,new)
         # check if move is valid
-        status = validateMove(old,new,player,whiteDice,brownDice,triangleD)
+        status = validateMove(old,new,distance,diceList,player,triangleD)
         # if invalid, try again
         if status == "Invalid":
             print("Invalid move; please try again.")
@@ -198,10 +207,14 @@ def main():
         if player == white:
             player = brown
             brownDice.rollGroup(wn)
+            diceList = availableDiceList(whiteDice,brownDice,player)
+            print("Brown dice:",diceList)
             move = input("Brown player's turn: ").upper()
         elif player == brown:
             player = white
             whiteDice.rollGroup(wn)
+            diceList = availableDiceList(whiteDice,brownDice,player)
+            print("White dice:",diceList)
             move = input("White player's turn: ").upper()
 
 main()
