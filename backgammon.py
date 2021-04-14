@@ -109,28 +109,30 @@ def tokenValid(old,new,triangleD,yes,no):
         return no
     return yes
 
-def moveValid(old,new,distance,dieVal,triangleD,player,yes,no):
+def moveValid(old,new,distance,player,diceValues,triangleD,yes,no):
     # if not valid dice roll
-    if abs(distance) not in dieVal:
+    if abs(distance) not in diceValues:
+        return no
+    # if attempting to move other player's piece
+    if triangleD[old].tknCol != player:
         return no
     return yes
 
-def validateMove(move,player,whiteDice,brownDice,triangleD):
+def validateMove(old,new,player,whiteDice,brownDice,triangleD):
     # some setup
-    old = move[:2]
-    new = move[3:]
     no = "Invalid"
     yes = "Valid"
+    boardLs = ["A1","A2","A3","A4","A5","A6",\
+                "B1","B2","B3","B4","B5","B6",\
+                "C6","C5","C4","C3","C2","C1",\
+                "D6","D5","D4","D3","D2","D1"]
 
     ### Basic token validation ###
     if tokenValid(old,new,triangleD,yes,no) == no:
         return no
 
     # more setup
-    boardLs = ["A1","A2","A3","A4","A5","A6",\
-                "B1","B2","B3","B4","B5","B6",\
-                "C6","C5","C4","C3","C2","C1",\
-                "D6","D5","D4","D3","D2","D1"]
+    # calculate distance for token move
     posOld = -1
     posNew = -1
     for i in range(len(boardLs)):
@@ -139,15 +141,20 @@ def validateMove(move,player,whiteDice,brownDice,triangleD):
         if boardLs[i] == new:
             posNew = i
     distance = posOld-posNew
+    # put correct dice values in list
     dice = whiteDice
     if player != "tan":
         dice = brownDice
-    dieVal = []
+    diceValues = []
     for die in dice.group:
-        dieVal.append(die.value)
-
+        diceValues.append(die.value)
+    # if doubles, add 2 more
+    if diceValues[0] == diceValues[1]:
+        diceValues.append(diceValues[0])
+        diceValues.append(diceValues[0])
+    
     ### Move validation ###
-    if moveValid(old,new,distance,dieVal,triangleD,player,yes,no) == no:
+    if moveValid(old,new,distance,player,diceValues,triangleD,yes,no) == no:
         return no
     
     return yes
@@ -170,8 +177,10 @@ def main():
     # make first move or "q" to quit game
     move = input("Move token from x to y (ex A1:A2): ").upper()
     while move != "Q":
+        old = move[:2]
+        new = move[3:]
         # check if move is valid
-        status = validateMove(move,player,whiteDice,brownDice,triangleD)
+        status = validateMove(old,new,player,whiteDice,brownDice,triangleD)
         # if invalid, try again
         if status == "Invalid":
             print("Invalid move; please try again.")
@@ -181,7 +190,7 @@ def main():
                 move = input("Brown player's turn: ").upper()
             continue
         # else play move
-        triangleD[new].changeTknColor(color)
+        triangleD[new].changeTknColor(player)
         triangleD[new].addToken(t,wn,board)
         triangleD[old].removeToken(t,wn,board)
         
