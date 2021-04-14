@@ -34,7 +34,7 @@ def newGame(t,wn,board,triangleD,white,brown):
         triangleD[pos].drawTokensOnTri(t,wn,board)
 
 ####################
-""" SET UP BOARD """
+""" CREATE BOARD """
 ####################
 def makeTriangles():
     # init values for making triangles
@@ -72,7 +72,7 @@ def makeTriangles():
     triangles['brownOut'] = bg_drawing.Triangle('E0bOut','beige',10.5,10)
     return triangles
 
-def setUpBoard():
+def createBoard():
     # turtle init stuff
     wn=turtle.Screen()
     wn.setworldcoordinates(-1,13,13,-1)
@@ -94,15 +94,7 @@ def setUpBoard():
 ######################
 """ GAMEPLAY LOGIC """
 ######################
-def validateMove(old,new,player,whiteDice,brownDice,triangleD):
-    no = "Invalid"
-    yes = "Valid"
-    boardLs = ["A1","A2","A3","A4","A5","A6",\
-                "B1","B2","B3","B4","B5","B6",\
-                "C6","C5","C4","C3","C2","C1",\
-                "D6","D5","D4","D3","D2","D1"]
-
-    ### Basic token validation ###
+def tokenValid(old,new,triangleD,yes,no):
     # if old is empty or new is full
     if triangleD[old].numTokens == 0:
         return no
@@ -115,9 +107,30 @@ def validateMove(old,new,player,whiteDice,brownDice,triangleD):
     if triangleD[new].numTokens > 1 and \
        triangleD[new].tknCol != triangleD[old].tknCol:
         return no
+    return yes
 
-    ### Move validation ###
-    # setup
+def moveValid(old,new,distance,dieVal,triangleD,player,yes,no):
+    # if not valid dice roll
+    if abs(distance) not in dieVal:
+        return no
+    return yes
+
+def validateMove(move,player,whiteDice,brownDice,triangleD):
+    # some setup
+    old = move[:2]
+    new = move[3:]
+    no = "Invalid"
+    yes = "Valid"
+
+    ### Basic token validation ###
+    if tokenValid(old,new,triangleD,yes,no) == no:
+        return no
+
+    # more setup
+    boardLs = ["A1","A2","A3","A4","A5","A6",\
+                "B1","B2","B3","B4","B5","B6",\
+                "C6","C5","C4","C3","C2","C1",\
+                "D6","D5","D4","D3","D2","D1"]
     posOld = -1
     posNew = -1
     for i in range(len(boardLs)):
@@ -132,49 +145,54 @@ def validateMove(old,new,player,whiteDice,brownDice,triangleD):
     dieVal = []
     for die in dice.group:
         dieVal.append(die.value)
-    # if not valid dice roll
-    if abs(distance) not in dieVal:
+
+    ### Move validation ###
+    if moveValid(old,new,distance,dieVal,triangleD,player,yes,no) == no:
         return no
-            
+    
     return yes
 
 def main():
-    t,wn,board,triangleD,whiteDice,brownDice,white,brown = setUpBoard()
+    # create + draw board
+    t,wn,board,triangleD,whiteDice,brownDice,white,brown = createBoard()
     bg_drawing.drawBoard(t,wn,board,triangleD)
+    # set up pieces for new game
     newGame(t,wn,board,triangleD,white,brown)
-    
+    # roll dice
     whiteDice.rollGroup(wn)
     brownDice.rollGroup(wn)
 
-    #print(board)
-    color = white
-    initColor = input("Team colour: ").lower()
-    if initColor == "brown" or initColor == "black":
-        color = brown
+    # choose starting player
+    player = white
+    firstPlayer = input("Player colour: ").lower()
+    if firstPlayer == "brown" or firstPlayer == "black":
+        player = brown
+    # make first move or "q" to quit game
     move = input("Move token from x to y (ex A1:A2): ").upper()
     while move != "Q":
-        old = move[:2]
-        new = move[3:]
-        status = validateMove(old,new,color,whiteDice,brownDice,triangleD)
+        # check if move is valid
+        status = validateMove(move,player,whiteDice,brownDice,triangleD)
+        # if invalid, try again
         if status == "Invalid":
             print("Invalid move; please try again.")
-            if color == white:
-                move = input("Player White's turn: ").upper()
+            if player == white:
+                move = input("White player's turn: ").upper()
             else:
-                move = input("Player Brown's turn: ").upper()
+                move = input("Brown player's turn: ").upper()
             continue
+        # else play move
         triangleD[new].changeTknColor(color)
         triangleD[new].addToken(t,wn,board)
         triangleD[old].removeToken(t,wn,board)
         
         # next turn
-        if color == white:
-            color = brown
+        if player == white:
+            player = brown
             brownDice.rollGroup(wn)
-            move = input("Player Brown's turn: ").upper()
-        elif color == brown:
-            color = white
+            move = input("Brown player's turn: ").upper()
+        elif player == brown:
+            player = white
             whiteDice.rollGroup(wn)
-            move = input("Player White's turn: ").upper()
+            move = input("White player's turn: ").upper()
 
 main()
