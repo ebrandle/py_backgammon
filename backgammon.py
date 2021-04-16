@@ -133,7 +133,7 @@ def validateMove(old,new,distance,diceList,player,triangleD):
     
     return yes
 
-def distanceOfMove(old,new):
+def distanceOfMove(old,new,boardLs):
     boardLs = ["A1","A2","A3","A4","A5","A6",\
                "B1","B2","B3","B4","B5","B6",\
                "C6","C5","C4","C3","C2","C1",\
@@ -163,6 +163,25 @@ def availableDiceList(whiteDice,brownDice,player):
         diceList.append(diceList[0])
     return diceList
 
+def makeValidMoveList(whiteDice,brownDice,player,triangleD):
+    # setup
+    validMoveList = []
+    diceList = availableDiceList(whiteDice,brownDice,player)
+    boardLs = ["A1","A2","A3","A4","A5","A6",\
+               "B1","B2","B3","B4","B5","B6",\
+               "C6","C5","C4","C3","C2","C1",\
+               "D6","D5","D4","D3","D2","D1"]
+    # start loops
+    for old in boardLs:
+        for new in boardLs:
+            distance = distanceOfMove(old,new,boardLs)
+            if distance > 6 or distance == 0:
+                continue
+            status = validateMove(old,new,distance,diceList,player,triangleD)
+            if status == "Valid":
+                validMoveList.append(old+":"+new)
+    return validMoveList,diceList
+
 def main():
     # create + draw board
     t,wn,board,triangleD,whiteDice,brownDice,white,brown = createBoard()
@@ -178,20 +197,18 @@ def main():
     firstPlayer = input("Player colour: ").lower()
     if firstPlayer == "brown" or firstPlayer == "black":
         player = brown
-    # find available dice
-    diceList = availableDiceList(whiteDice,brownDice,player)
-    print(player,"dice:",diceList)
+
+    # make validMoveList
+    validMoveList,diceList = makeValidMoveList(whiteDice,brownDice,player,triangleD)
+    print(validMoveList)
+    
     # make first move or "q" to quit game
     move = input("Move token from x to y (ex A1:A2): ").upper()
     while move != "Q":
         old = move[:2]
         new = move[3:]
-        # calculate move distance
-        distance = distanceOfMove(old,new)
-        # check if move is valid
-        status = validateMove(old,new,distance,diceList,player,triangleD)
         # if invalid, try again
-        if status == "Invalid":
+        if move not in validMoveList:
             print("Invalid move; please try again.")
             if player == white:
                 move = input("White player's turn: ").upper()
