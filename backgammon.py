@@ -116,6 +116,11 @@ def moveValid(old,new,distance,diceList,player,triangleD,yes,no):
     # if attempting to move other player's piece
     if triangleD[old].tknCol != player:
         return no
+    # attempting to move backwards
+    if distance > 0 and player == "tan":
+        return no
+    elif distance < 0 and player == "saddlebrown":
+        return no
     return yes
 
 def validateMove(old,new,distance,diceList,player,triangleD):
@@ -163,10 +168,9 @@ def availableDiceList(whiteDice,brownDice,player):
         diceList.append(diceList[0])
     return diceList
 
-def makeValidMoveList(whiteDice,brownDice,player,triangleD):
+def makeValidMoveList(diceList,player,triangleD):
     # setup
     validMoveList = []
-    diceList = availableDiceList(whiteDice,brownDice,player)
     boardLs = ["A1","A2","A3","A4","A5","A6",\
                "B1","B2","B3","B4","B5","B6",\
                "C6","C5","C4","C3","C2","C1",\
@@ -180,7 +184,16 @@ def makeValidMoveList(whiteDice,brownDice,player,triangleD):
             status = validateMove(old,new,distance,diceList,player,triangleD)
             if status == "Valid":
                 validMoveList.append(old+":"+new)
-    return validMoveList,diceList
+    return validMoveList
+
+def newPlayerTurn(player,white,brown,whiteDice,brownDice,wn):
+    if player == white:
+        player = brown
+        brownDice.rollGroup(wn)
+    elif player == brown:
+        player = white
+        whiteDice.rollGroup(wn)
+    return player#,whiteDice,brownDice
 
 def main():
     # create + draw board
@@ -198,40 +211,82 @@ def main():
     if firstPlayer == "brown" or firstPlayer == "black":
         player = brown
 
+    # find available dice list
+    diceList = availableDiceList(whiteDice,brownDice,player)
+
     # make validMoveList
-    validMoveList,diceList = makeValidMoveList(whiteDice,brownDice,player,triangleD)
+    validMoveList = makeValidMoveList(diceList,player,triangleD)
     print(validMoveList)
-    
-    # make first move or "q" to quit game
-    move = input("Move token from x to y (ex A1:A2): ").upper()
-    while move != "Q":
-        old = move[:2]
-        new = move[3:]
-        # if invalid, try again
-        if move not in validMoveList:
-            print("Invalid move; please try again.")
+    print(player,"dice:",diceList)
+
+    quitGame = False
+    while quitGame == False:
+        # make first move or "q" to quit game
+        move = input("Move token from x to y (ex A1:A2): ").upper()
+        while move != "Q":
+            while len(diceList) != 0:
+                if move == "Q":
+                    quitGame = True
+                    break
+                # if invalid, try again
+                if move not in validMoveList:
+                    print("Invalid move; please try again.")
+                    if player == white:
+                        move = input("White player's turn: ").upper()
+                    else:
+                        move = input("Brown player's turn: ").upper()
+                    continue
+                # else play move
+                old = move[:2]
+                new = move[3:]
+                distance = distanceOfMove(old,new,-1)
+                
+                print("Distance:",distance,"diceList:",diceList)
+                diceList.remove(abs(distance))
+                if len(diceList) == 0:
+                    player = newPlayerTurn(player,white,brown,whiteDice,brownDice,wn)
+                    break
+                print("New diceList:",diceList)
+                triangleD[new].changeTknColor(player)
+                triangleD[new].addToken(t,wn,board)
+                triangleD[old].removeToken(t,wn,board)
+                if player == white:
+                    validMoveList = makeValidMoveList(diceList,player,triangleD)
+                    print(validMoveList)
+                    print("White dice:",diceList)
+                    move = input("White player's turn: ").upper()
+                    continue
+                elif player == brown:
+                    validMoveList = makeValidMoveList(diceList,player,triangleD)
+                    print(validMoveList)
+                    print("Brown dice:",diceList)
+                    move = input("Brown player's turn: ").upper()
+                    continue
+                else:
+                    print("Invalid player")
+                    move == "Q"
+                    quitGame = True
+                    break
+            
+            # next turn
+            #player = newPlayerTurn(player,white,brown,whiteDice,brownDice)
+            validMoveList = makeValidMoveList(diceList,player,triangleD)
+            print(validMoveList)
             if player == white:
+                whiteDice.rollGroup(wn)
+                print("White dice:",diceList)
                 move = input("White player's turn: ").upper()
-            else:
+            elif player == brown:
+                brownDice.rollGroup(wn)
+                print("Brown dice:",diceList)
                 move = input("Brown player's turn: ").upper()
-            continue
-        # else play move
-        triangleD[new].changeTknColor(player)
-        triangleD[new].addToken(t,wn,board)
-        triangleD[old].removeToken(t,wn,board)
-        
-        # next turn
-        if player == white:
-            player = brown
-            brownDice.rollGroup(wn)
-            diceList = availableDiceList(whiteDice,brownDice,player)
-            print("Brown dice:",diceList)
-            move = input("Brown player's turn: ").upper()
-        elif player == brown:
-            player = white
-            whiteDice.rollGroup(wn)
-            diceList = availableDiceList(whiteDice,brownDice,player)
-            print("White dice:",diceList)
-            move = input("White player's turn: ").upper()
+            if move == "Q":
+                quitGame = True
+                break
+        if move == "Q":
+            quitGame = True
+        if quitGame == True:
+            break
+    print("Game ended.")
 
 main()
