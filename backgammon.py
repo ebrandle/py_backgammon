@@ -242,14 +242,14 @@ def main():
                 distance = distanceOfMove(old,new,-1)
                 
                 print("Distance:",distance,"diceList:",diceList)
+                triangleD[new].changeTknColor(player)
+                triangleD[new].addToken(t,wn,board)
+                triangleD[old].removeToken(t,wn,board)
                 diceList.remove(abs(distance))
                 if len(diceList) == 0:
                     player = newPlayerTurn(player,white,brown,whiteDice,brownDice,wn)
                     break
-                print("New diceList:",diceList)
-                triangleD[new].changeTknColor(player)
-                triangleD[new].addToken(t,wn,board)
-                triangleD[old].removeToken(t,wn,board)
+                #print("New diceList:",diceList)
                 if player == white:
                     validMoveList = makeValidMoveList(diceList,player,triangleD)
                     print(validMoveList)
