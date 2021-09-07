@@ -217,7 +217,10 @@ def main():
     # make validMoveList
     validMoveList = makeValidMoveList(diceList,player,triangleD)
     print(validMoveList)
-    print(player,"dice:",diceList)
+    if player == white:
+        print("White dice:",diceList)
+    elif player == brown:
+        print("Brown dice:",diceList)
 
     quitGame = False
     while quitGame == False:
@@ -269,17 +272,20 @@ def main():
                     break
             
             # next turn
-            print("** ** New player turn")
             #player = newPlayerTurn(player,white,brown,whiteDice,brownDice)
             if player == white:
+                print("\nWhite player's turn!")
                 whiteDice.rollGroup(wn)
+                print("Dice rolled.")
                 diceList = availableDiceList(whiteDice,brownDice,player)
                 validMoveList = makeValidMoveList(diceList,player,triangleD)
                 print(validMoveList)
                 print("White dice:",diceList)
                 move = input("White player's turn: ").upper()
             elif player == brown:
+                print("\nBrown player's turn!")
                 brownDice.rollGroup(wn)
+                print("Dice rolled.")
                 diceList = availableDiceList(whiteDice,brownDice,player)
                 validMoveList = makeValidMoveList(diceList,player,triangleD)
                 print(validMoveList)
