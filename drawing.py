@@ -1,3 +1,6 @@
+## ARCHIVE
+# Old drawing.py file
+
 # Backgammon drawing module
 # token, board, triangle
 # Esther Brandle

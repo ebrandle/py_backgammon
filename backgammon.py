@@ -241,7 +241,7 @@ def main():
                 new = move[3:]
                 distance = distanceOfMove(old,new,-1)
                 
-                print("Distance:",distance,"diceList:",diceList)
+                #print("Distance:",distance,"diceList:",diceList)
                 triangleD[new].changeTknColor(player)
                 triangleD[new].addToken(t,wn,board)
                 triangleD[old].removeToken(t,wn,board)
@@ -269,15 +269,20 @@ def main():
                     break
             
             # next turn
+            print("** ** New player turn")
             #player = newPlayerTurn(player,white,brown,whiteDice,brownDice)
-            validMoveList = makeValidMoveList(diceList,player,triangleD)
-            print(validMoveList)
             if player == white:
                 whiteDice.rollGroup(wn)
+                diceList = availableDiceList(whiteDice,brownDice,player)
+                validMoveList = makeValidMoveList(diceList,player,triangleD)
+                print(validMoveList)
                 print("White dice:",diceList)
                 move = input("White player's turn: ").upper()
             elif player == brown:
                 brownDice.rollGroup(wn)
+                diceList = availableDiceList(whiteDice,brownDice,player)
+                validMoveList = makeValidMoveList(diceList,player,triangleD)
+                print(validMoveList)
                 print("Brown dice:",diceList)
                 move = input("Brown player's turn: ").upper()
             if move == "Q":
