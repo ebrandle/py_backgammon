@@ -138,7 +138,7 @@ def validateMove(old,new,distance,diceList,player,triangleD):
     
     return yes
 
-def distanceOfMove(old,new,boardLs):
+def distanceOfMove(old,new):
     boardLs = ["A1","A2","A3","A4","A5","A6",\
                "B1","B2","B3","B4","B5","B6",\
                "C6","C5","C4","C3","C2","C1",\
@@ -178,7 +178,7 @@ def makeValidMoveList(diceList,player,triangleD):
     # start loops
     for old in boardLs:
         for new in boardLs:
-            distance = distanceOfMove(old,new,boardLs)
+            distance = distanceOfMove(old,new)
             if distance > 6 or distance == 0:
                 continue
             status = validateMove(old,new,distance,diceList,player,triangleD)
@@ -242,7 +242,7 @@ def main():
                 # else play move
                 old = move[:2]
                 new = move[3:]
-                distance = distanceOfMove(old,new,-1)
+                distance = distanceOfMove(old,new)
                 
                 #print("Distance:",distance,"diceList:",diceList)
                 triangleD[new].changeTknColor(player)
