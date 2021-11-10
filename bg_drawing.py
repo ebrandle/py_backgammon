@@ -28,8 +28,10 @@ class Triangle:
         self.ringCol = -1 #'saddlebrown'
 
     def __str__(self):
-        print(self.name+':',self.clr,self.x,self.y)
-        print('Number of tokens:',self.numTokens)
+        info = self.name+': '+self.clr+' '+str(self.x)+' '+str(self.y)+' \nNumber of tokens: '+str(self.numTokens)
+        #print(info)#self.name+':',self.clr,self.x,self.y)
+        #print('Number of tokens:',self.numTokens)
+        return info
 
     # Drawing triangle methods
     def drawTriangle(self,t,wn):
