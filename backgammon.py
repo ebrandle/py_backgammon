@@ -121,6 +121,16 @@ def moveValid(old,new,distance,diceList,player,triangleD,yes,no):
         return no
     elif distance < 0 and player == "saddlebrown":
         return no
+    
+    ''' TESTING PIECES ON BAR '''
+    # if white and have pieces on bar
+    if player == "tan" and triangleD['whiteBar'].numTokens > 0 and\
+       triangleD[old].name != "E0wBar":
+        return no
+    elif player == "saddlebrown" and triangleD['brownBar'].numTokens > 0 and\
+       triangleD[old].name != "E0bBar":
+        return no
+    
     return yes
 
 def validateMove(old,new,distance,diceList,player,triangleD):
@@ -243,6 +253,17 @@ def main():
                 old = move[:2]
                 new = move[3:]
                 distance = distanceOfMove(old,new)
+
+                # if bouncing opponent piece
+                if triangleD[new].tknCol != player and\
+                   triangleD[new].numTokens == 1:
+                    if player == brown:
+                        triangleD['whiteBar'].addToken(t,wn,board)
+                        print("White bar:",triangleD['whiteBar'].numTokens)
+                    else:
+                        triangleD['brownBar'].addToken(t,wn,board)
+                        print("Brown bar:",triangleD['brownBar'].numTokens)
+                    triangleD[new].removeToken(t,wn,board)
                 
                 #print("Distance:",distance,"diceList:",diceList)
                 triangleD[new].changeTknColor(player)
