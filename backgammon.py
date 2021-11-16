@@ -66,10 +66,14 @@ def makeTriangles():
             triangles[name] = bg_drawing.Triangle(name,color,x,y)
     # white
     triangles['whiteOut'] = bg_drawing.Triangle('E0wOut','beige',.75,10)
+    triangles['whiteOut'].changeTknColor('tan')
     triangles['whiteBar'] = bg_drawing.Triangle('E0wBar','beige',2.85,10)
+    triangles['whiteBar'].changeTknColor('tan')
     # brown
     triangles['brownBar'] = bg_drawing.Triangle('E0bBar','beige',8.25,10)
+    triangles['brownBar'].changeTknColor('saddlebrown')
     triangles['brownOut'] = bg_drawing.Triangle('E0bOut','beige',10.5,10)
+    triangles['brownOut'].changeTknColor('saddlebrown')
     return triangles
 
 def createBoard():

@@ -145,6 +145,7 @@ def drawToken(t,wn,quad,tri,color,ringColor,board,x,y,tknNum):
     elif color == 'saddlebrown':
         board[quad][tri] = 'b'+tknNum
     else:
+        print(error,"\nColor:", color)
         return error
     wn.tracer(False)
     t.up()
