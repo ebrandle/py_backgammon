@@ -124,7 +124,7 @@ class Triangle:
         
     def removeToken(self,t,wn,board):
         self.numTokens -= 1
-        if self.numTokens == 0:
+        if self.numTokens == 0 and self.quad != "E":
             self.tknCol = -1
         self.redrawTriangle(t,wn,board)
             
