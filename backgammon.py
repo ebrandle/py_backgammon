@@ -238,7 +238,7 @@ def main():
         move = input("Move token from x to y (ex A1:A2): ").upper()
         while move != "Q":
             while len(diceList) != 0:
-                if move == "Q":
+                if move[0] == "Q":
                     quitGame = True
                     break
                 # if invalid, try again
@@ -312,10 +312,10 @@ def main():
                 print(validMoveList)
                 print("Brown dice:",diceList)
                 move = input("Brown player's turn: ").upper()
-            if move == "Q":
+            if move[0] == "Q":
                 quitGame = True
                 break
-        if move == "Q":
+        if move[0] == "Q":
             quitGame = True
         if quitGame == True:
             break
