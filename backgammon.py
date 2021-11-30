@@ -66,13 +66,13 @@ def makeTriangles():
             triangles[name] = bg_drawing.Triangle(name,color,x,y)
     # white
     triangles['E1'] = bg_drawing.Triangle('E1','beige',.75,10)
-    triangles['E1'].changeTknColor('tan')
     triangles['E2'] = bg_drawing.Triangle('E2','beige',2.85,10)
+    triangles['E1'].changeTknColor('tan')
     triangles['E2'].changeTknColor('tan')
     # brown
     triangles['E3'] = bg_drawing.Triangle('E3','beige',8.25,10)
-    triangles['E3'].changeTknColor('saddlebrown')
     triangles['E4'] = bg_drawing.Triangle('E4','beige',10.5,10)
+    triangles['E3'].changeTknColor('saddlebrown')
     triangles['E4'].changeTknColor('saddlebrown')
     return triangles
 
@@ -130,11 +130,11 @@ def moveValid(old,new,distance,diceList,player,triangleD,yes,no):
     # if white and have pieces on bar
     if player == "tan" and triangleD['E2'].numTokens > 0 and\
        triangleD[old].name != "E2":
-        print("Alert triggered. Attempting to validate move from E2.")
+        print("Alert triggered. Attempting to move while there are pieces on E2.")
         return no
     elif player == "saddlebrown" and triangleD['E3'].numTokens > 0 and\
        triangleD[old].name != "E3":
-        print("Alert triggered. Attempting to validate move from E3.")
+        print("Alert triggered. Attempting to move while there are pieces on E3.")
         return no
     
     return yes
@@ -158,8 +158,7 @@ def distanceOfMove(old,new):
     boardLs = ["A1","A2","A3","A4","A5","A6",\
                "B1","B2","B3","B4","B5","B6",\
                "C6","C5","C4","C3","C2","C1",\
-               "D6","D5","D4","D3","D2","D1",\
-               "E1","E2","E3","E4"]
+               "D6","D5","D4","D3","D2","D1"]
     posOld = -1
     posNew = -1
     # calculate distance for token move
@@ -169,6 +168,13 @@ def distanceOfMove(old,new):
         if boardLs[i] == new:
             posNew = i
     distance = posOld-posNew
+
+    # if moving from bar
+    if old[0] == "E":
+        if new[0] == "A":
+            distance = int(new[1])
+        elif new[0] == "D":
+            distance = abs(int(new[1])-6)+1
     return distance
 
 def availableDiceList(whiteDice,brownDice,player):
