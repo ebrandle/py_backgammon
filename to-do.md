@@ -1,8 +1,7 @@
 # Backgammon
 ## To Do
-- get pieces on/off mid-board
-- calculate logic for when to take pieces off board (end-game stuff)
-- calculate win stuff
+- calculate logic for when to take pieces off board (end-game moves)
+- calculate win logic
 
 ## In Progress
-- proper number of turns / person
+- get pieces from bar to board
