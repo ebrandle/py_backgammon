@@ -125,19 +125,48 @@ def moveValid(old,new,distance,diceList,player,triangleD,yes,no):
         return no
     elif distance < 0 and player == "saddlebrown":
         return no
+
+    ''' TESTING TAKE OFF BOARD '''
+    # new = e, still pieces on board outside end quad
+    if triangleD[new].name == "E1" and player == "tan":
+        print(triangleD[new])
+        if not allPiecesInEnd(player,triangleD):
+            return no
+        
+    if triangleD[new].name == "E4" and player == "saddlebrown":
+        print(triangleD[new])
+        if not allPiecesInEnd(player,triangleD):
+            return no    
     
     ''' TESTING PIECES ON BAR '''
     # if white and have pieces on bar
-    if player == "tan" and triangleD['E2'].numTokens > 0 and\
+    if player == "tan" and triangleD['E2'].numTokens > 0 and \
        triangleD[old].name != "E2":
         print("Alert triggered. Attempting to move while there are pieces on E2.")
         return no
-    elif player == "saddlebrown" and triangleD['E3'].numTokens > 0 and\
+    elif player == "saddlebrown" and triangleD['E3'].numTokens > 0 and \
        triangleD[old].name != "E3":
         print("Alert triggered. Attempting to move while there are pieces on E3.")
         return no
     
     return yes
+
+''' TESTING TAKE OFF BOARD '''
+def allPiecesInEnd(player,triangleD):
+    # all pieces have to be in (a or d) and (e3 or e2)
+    for tri in triangleD:
+        if player == "tan":
+            if triangleD[tri].numTokens > 0 and triangleD[tri].tknCol == player and \
+               (triangleD[tri].quad == "A" or triangleD[tri].quad == "B" or \
+                triangleD[tri].quad == "C" or triangleD[tri].name == "E2"):
+                return False
+        else:
+            if triangleD[tri].numTokens > 0 and triangleD[tri].tknCol == player and \
+               (triangleD[tri].quad == "B" or triangleD[tri].quad == "C" or \
+                triangleD[tri].quad == "D" or triangleD[tri].name == "E3"):
+                return False
+    
+    return True
 
 def validateMove(old,new,distance,diceList,player,triangleD):
     # some setup
@@ -175,6 +204,11 @@ def distanceOfMove(old,new):
             distance = int(new[1])
         elif new[0] == "D":
             distance = abs(int(new[1])-6)+1
+
+    # if moving to bar
+    #elif new[0] == "E":
+    #    distance = int(old[1])
+    
     return distance
 
 def availableDiceList(whiteDice,brownDice,player):
