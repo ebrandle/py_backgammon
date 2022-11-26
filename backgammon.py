@@ -165,7 +165,6 @@ def allPiecesInEnd(player,triangleD):
                (triangleD[tri].quad == "B" or triangleD[tri].quad == "C" or \
                 triangleD[tri].quad == "D" or triangleD[tri].name == "E3"):
                 return False
-    
     return True
 
 def validateMove(old,new,distance,diceList,player,triangleD):
@@ -227,12 +226,22 @@ def availableDiceList(whiteDice,brownDice,player):
 
 def makeValidMoveList(diceList,player,triangleD):
     # setup
+    bouncedLs = []
     validMoveList = []
     boardLs = ["A1","A2","A3","A4","A5","A6",\
                "B1","B2","B3","B4","B5","B6",\
                "C6","C5","C4","C3","C2","C1",\
                "D6","D5","D4","D3","D2","D1",\
                "E1","E2","E3","E4"]
+
+    # check bar
+    if (player == "tan" and triangleD['E2'].numTokens > 0) or \
+       (player == "saddlebrown" and triangleD['E3'].numTokens > 0):
+        bouncedLs = validMoveListBar(diceList,player,triangleD,boardLs)
+        if bouncedLs == []:
+            return []
+        print(bouncedLs)
+        validMoveList.append(bouncedLs)
     # start loops
     for old in boardLs:
         for new in boardLs:
@@ -243,6 +252,28 @@ def makeValidMoveList(diceList,player,triangleD):
             if status == "Valid":
                 validMoveList.append(old+":"+new)
     return validMoveList
+
+def validMoveListBar(diceList,player,triangleD,boardLs):
+    bouncedLs = []
+    if player == "tan":
+        if triangleD["E2"].numTokens not in diceList:
+            return []
+        old = "E2"
+        for new in ["A1","A2","A3","A4","A5","A6"]:
+            distance = int(new[1])
+            status = validateMove(old,new,distance,diceList,player,triangleD)
+            if status == "Valid":
+                bouncedLs.append(old+":"+new)
+    elif player == "saddlebrown":
+        if triangleD["E3"].numTokens not in diceList:
+            return []
+        old = "E3"
+        for new in ["D1","D2","D3","D4","D5","D6"]:
+            distance = int(new[1])
+            status = validateMove(old,new,distance,diceList,player,triangleD)
+            if status == "Valid":
+                bouncedLs.append(old+":"+new)
+    return bouncedLs
 
 def newPlayerTurn(player,white,brown,whiteDice,brownDice,wn):
     if player == white:
